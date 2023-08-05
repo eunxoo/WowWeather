@@ -1,7 +1,12 @@
-import "./App.css";
+import React from "react";
+import Login from "./pages/login/Login";
 
-function App() {
-  return <div className="App">gg</div>;
-}
+const App = () => {
+  return (
+    <div>
+      <Login />
+    </div>
+  );
+};
 
 export default App;
