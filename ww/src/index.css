@@ -11,3 +11,56 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+* {
+  font-family: "NanumSquareRoundR";
+}
+
+@font-face {
+  font-family: "NotoSansKR";
+  font-style: normal;
+  font-weight: 500;
+  src: url("/public/fonts/NotoSansKR.woff") format("woff");
+}
+
+@font-face {
+  font-family: "NanumSquareRoundR";
+  src: url("/public/fonts/NanumSquareRoundR.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "scoreR";
+  src: url("/public/fonts/scdream4.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: bold;
+  src: url("/public/fonts/pretendard/Pretendard-Bold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight:l lighter;
+  src: url("/public/fonts/pretendard/Pretendard-Light.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: normal;
+  src: url("/public/fonts/pretendard/Pretendard-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 100;
+  src: url("/public/fonts/pretendard/Pretendard-Light.woff") format("woff");
+}
