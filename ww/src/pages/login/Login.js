@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { PiDotsThreeVertical } from "react-icons/pi";
+import GoogleLogin from "./GoogleLogin";
 
 const Login = () => {
   return (
@@ -17,9 +18,7 @@ const Login = () => {
         </BarContainer>
         <RegisterDiv>회원가입</RegisterDiv>
       </Boxx>
-      <Boxxx>
-        <GoogleBtn>구글로 로그인하기</GoogleBtn>
-      </Boxxx>
+      <GoogleLogin />
     </Container>
   );
 };
