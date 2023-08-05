@@ -1,15 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { PiDotsThreeVertical } from "react-icons/pi";
 import GoogleLogin from "./GoogleLogin";
+import { firebaseAuth, signOut, signInWithEmailAndPassword } from "../../fbase";
+import { onAuthStateChanged } from "@firebase/auth";
 
 const Login = () => {
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [user, setUser] = useState({}); // 코드 추가
+  onAuthStateChanged(firebaseAuth, (currentUser) => {
+    setUser(currentUser);
+  });
+
+  const signIn = async () => {
+    try {
+      const user = await signInWithEmailAndPassword(
+        firebaseAuth,
+        loginEmail,
+        loginPassword
+      );
+      console.log(user);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const logout = async () => {
+    await signOut(firebaseAuth);
+  };
+
   return (
     <Container>
       <Box>
-        <InputEmail placeholder="이메일" />
-        <InputPw placeholder="비밀번호" />
-        <LoginBtn>로그인</LoginBtn>
+        <InputEmail
+          onChange={(e) => {
+            setLoginEmail(e.target.value);
+          }}
+          placeholder="이메일"
+        />
+        <InputPw
+          onChange={(e) => {
+            setLoginPassword(e.target.value);
+          }}
+          placeholder="비밀번호"
+        />
+        <LoginBtn onClick={signIn}>로그인</LoginBtn>
       </Box>
       <Boxx>
         <SearchPassWord>비밀번호 찾기</SearchPassWord>
@@ -143,8 +179,3 @@ const RegisterDiv = styled.div`
   width: max-content;
   font-size: 0.8rem;
 `;
-const Boxxx = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-const GoogleBtn = styled.button``;
