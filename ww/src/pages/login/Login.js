@@ -1,19 +1,21 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { PiDotsThreeVertical } from "react-icons/pi";
 import GoogleLogin from "./GoogleLogin";
-import { firebaseAuth, signOut, signInWithEmailAndPassword } from "../../fbase";
+import { firebaseAuth, signInWithEmailAndPassword } from "../../fbase";
 import { onAuthStateChanged } from "@firebase/auth";
 
 const Login = () => {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  const [user, setUser] = useState({}); // 코드 추가
-  onAuthStateChanged(firebaseAuth, (currentUser) => {
-    setUser(currentUser);
-  });
-
-  const signIn = async () => {
+  const [user, setUser] = useState({});
+  // onAuthStateChanged(firebaseAuth, (currentUser) => {
+  //   setUser(currentUser);
+  // });
+  const navigate = useNavigate();
+  const signIn = async (e) => {
+    e.preventDefault();
     try {
       const user = await signInWithEmailAndPassword(
         firebaseAuth,
@@ -21,25 +23,31 @@ const Login = () => {
         loginPassword
       );
       console.log(user);
+      setUser(user.user);
+      window.location.replace("/");
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  const logout = async () => {
-    await signOut(firebaseAuth);
-  };
+  // const logout = async () => {
+  //   await signOut(firebaseAuth);
+  // };
 
   return (
     <Container>
       <Box>
         <InputEmail
+          type="email"
+          value={loginEmail}
           onChange={(e) => {
             setLoginEmail(e.target.value);
           }}
           placeholder="이메일"
         />
         <InputPw
+          type="password"
+          value={loginPassword}
           onChange={(e) => {
             setLoginPassword(e.target.value);
           }}
@@ -52,7 +60,9 @@ const Login = () => {
         <BarContainer>
           <PiDotsThreeVertical className="bar" />
         </BarContainer>
-        <RegisterDiv>회원가입</RegisterDiv>
+        <RegisterDiv onClick={() => navigate("/register")}>
+          회원가입
+        </RegisterDiv>
       </Boxx>
       <GoogleLogin />
     </Container>
