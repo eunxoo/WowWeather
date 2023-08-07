@@ -38,7 +38,7 @@ const Register = () => {
       setErrorMsg1(" ");
       setErrorMsg2(" ");
       setErrorMsg3(" ");
-      if (displayName == " ") {
+      if (displayName === " ") {
         setIsName(false);
       }
       const createdUser = await createUserWithEmailAndPassword(
@@ -69,6 +69,8 @@ const Register = () => {
         case "auth/email-already-in-use":
           setErrorMsg3("* 이미 가입되어 있는 계정입니다.");
           break;
+        default:
+          break;
       }
     }
   };
@@ -82,7 +84,7 @@ const Register = () => {
         <Box>
           <SemiBox>
             <AText>이메일</AText>
-            {errorMsg1 == " " ? (
+            {errorMsg1 === " " ? (
               <AInput
                 name="email"
                 value={registerEmail}
@@ -101,7 +103,7 @@ const Register = () => {
           </SemiBox>
           <SemiBox>
             <AText>비밀번호 (6자리 이상 입력해주세요.) </AText>
-            {errorMsg2 == " " ? (
+            {errorMsg2 === " " ? (
               <AInput
                 name="password"
                 value={registerPassword}
@@ -278,8 +280,8 @@ const BtnBox = styled.div`
 `;
 
 const InvalidBtn = styled.div`
-  border: 2px solid #31b5ff;
-  background-color: grey;
+  border: 2px solid #e6e6e6;
+  background-color: #e6e6e6;
   padding: 0.5vh 3vw;
   border-radius: 10px;
   width: 70%;
