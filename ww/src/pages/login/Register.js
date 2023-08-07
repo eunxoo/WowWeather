@@ -1,10 +1,16 @@
 import React, { useState } from "react";
-import { firebaseAuth, createUserWithEmailAndPassword } from "../../fbase";
+import {
+  firebaseAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "../../fbase";
 import styled from "styled-components";
+import { FaArrowLeft } from "react-icons/fa";
 
 const Register = () => {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [errorMsg1, setErrorMsg1] = useState(" ");
   const [errorMsg2, setErrorMsg2] = useState(" ");
   const [errorMsg3, setErrorMsg3] = useState(" ");
@@ -32,23 +38,29 @@ const Register = () => {
       console.log(createdUser);
       setRegisterEmail("");
       setRegisterPassword("");
+      setDisplayName("");
+      await updateProfile(firebaseAuth.currentUser, {
+        displayName: displayName,
+      });
+      window.location.replace("/login");
     } catch (err) {
       console.log(err.code);
       switch (err.code) {
         case "auth/weak-password":
-          setErrorMsg2("! 비밀번호는 6자리 이상이어야 합니다");
+          setErrorMsg2("* 비밀번호는 6자리 이상이어야 합니다.");
           break;
         case "auth/invalid-email":
-          setErrorMsg1("! 잘못된 이메일 주소입니다");
+          setErrorMsg1("* 잘못된 이메일 주소입니다.");
           break;
         case "auth/email-already-in-use":
-          setErrorMsg3("! 이미 가입되어 있는 계정입니다");
+          setErrorMsg3("* 이미 가입되어 있는 계정입니다.");
           break;
       }
     }
   };
   return (
     <Container>
+      <FaArrowLeft />
       <Box>
         <SemiBox>
           <AText>아이디</AText>
@@ -60,7 +72,7 @@ const Register = () => {
               setRegisterEmail(e.target.value);
             }}
           ></AInput>
-          <ErrMsg1>{errorMsg1 ? errorMsg1 : errorMsg3}</ErrMsg1>
+          <ErrMsg1>{errorMsg1}</ErrMsg1>
         </SemiBox>
         <SemiBox>
           <AText>비밀번호</AText>
@@ -74,8 +86,20 @@ const Register = () => {
           ></AInput>
           <ErrMsg2>{errorMsg2}</ErrMsg2>
         </SemiBox>
+        <SemiBox>
+          <AText>닉네임</AText>
+          <AInput
+            name="displayName"
+            value={displayName}
+            placeholder="닉네임을 입력해주세요"
+            onChange={(e) => {
+              setDisplayName(e.target.value);
+            }}
+          ></AInput>
+        </SemiBox>
         <BtnBox>
-          <ValidBtn onClick={signup}>이메일 인증하기</ValidBtn>
+          <ValidBtn onClick={signup}>회원가입</ValidBtn>
+          <ErrMsg3>{errorMsg3}</ErrMsg3>
         </BtnBox>
       </Box>
     </Container>
@@ -148,7 +172,14 @@ const ErrMsg2 = styled.div`
   color: red;
 `;
 
+const ErrMsg3 = styled.div`
+  position: absolute;
+  top: 11vh;
+  color: red;
+`;
+
 const BtnBox = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
