@@ -24,7 +24,11 @@ const Login = () => {
       );
       console.log(user);
       setUser(user.user);
-      window.location.replace("/");
+      if (!user.user.emailVerified) {
+        alert("이메일 인증을 해주세요.");
+      } else {
+        window.location.replace("/");
+      }
     } catch (error) {
       console.log(error.message);
     }

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { firebaseAuth } from "./fbase";
 import AppRouter from "./AppRouter";
@@ -10,7 +9,7 @@ const App = () => {
   const [userObj, setUserObj] = useState(null);
   useEffect(() => {
     firebaseAuth.onAuthStateChanged((user) => {
-      if (user) {
+      if (user && user.emailVerified) {
         setIsLoggedIn(true);
         setUserObj({
           uid: user.uid,
