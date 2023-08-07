@@ -4,7 +4,7 @@ import CheckList from "./pages/checkList/CheckList";
 import Style from "./pages/myStyle/Style";
 import Login from "./pages/login/Login";
 import Register from "./pages/login/Register";
-import { Redirect, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Menubar from "./components/Menubar";
 
 const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {

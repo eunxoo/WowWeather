@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import {
   firebaseAuth,
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   updateProfile,
 } from "../../fbase";
 import styled from "styled-components";
 import { FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [registerEmail, setRegisterEmail] = useState("");
@@ -30,6 +32,9 @@ const Register = () => {
       setErrorMsg1(" ");
       setErrorMsg2(" ");
       setErrorMsg3(" ");
+      if (displayName === " ") {
+        setIsName(false);
+      }
       const createdUser = await createUserWithEmailAndPassword(
         firebaseAuth,
         registerEmail,
@@ -55,53 +60,85 @@ const Register = () => {
         case "auth/email-already-in-use":
           setErrorMsg3("* 이미 가입되어 있는 계정입니다.");
           break;
+        default:
+          break;
       }
     }
   };
   return (
     <Container>
-      <FaArrowLeft />
-      <Box>
-        <SemiBox>
-          <AText>아이디</AText>
-          <AInput
-            name="email"
-            value={registerEmail}
-            placeholder="이메일을 입력해주세요"
-            onChange={(e) => {
-              setRegisterEmail(e.target.value);
-            }}
-          ></AInput>
-          <ErrMsg1>{errorMsg1}</ErrMsg1>
-        </SemiBox>
-        <SemiBox>
-          <AText>비밀번호</AText>
-          <AInput
-            name="password"
-            value={registerPassword}
-            placeholder="비밀번호를 입력해주세요"
-            onChange={(e) => {
-              setRegisterPassword(e.target.value);
-            }}
-          ></AInput>
-          <ErrMsg2>{errorMsg2}</ErrMsg2>
-        </SemiBox>
-        <SemiBox>
-          <AText>닉네임</AText>
-          <AInput
-            name="displayName"
-            value={displayName}
-            placeholder="닉네임을 입력해주세요"
-            onChange={(e) => {
-              setDisplayName(e.target.value);
-            }}
-          ></AInput>
-        </SemiBox>
-        <BtnBox>
-          <ValidBtn onClick={signup}>회원가입</ValidBtn>
-          <ErrMsg3>{errorMsg3}</ErrMsg3>
-        </BtnBox>
-      </Box>
+      <Wrap>
+        <Header>
+          <FaArrowLeft className="arrow" onClick={() => navigate("/")} />
+        </Header>
+        <Box>
+          <SemiBox>
+            <AText>이메일</AText>
+            {errorMsg1 === " " ? (
+              <AInput
+                name="email"
+                value={registerEmail}
+                placeholder="이메일을 입력해주세요"
+                onChange={onChange}
+              ></AInput>
+            ) : (
+              <ErrorInput
+                name="email"
+                value={registerEmail}
+                placeholder="이메일을 입력해주세요"
+                onChange={onChange}
+              ></ErrorInput>
+            )}
+            <ErrMsg1>{errorMsg1}</ErrMsg1>
+          </SemiBox>
+          <SemiBox>
+            <AText>비밀번호 (6자리 이상 입력해주세요.) </AText>
+            {errorMsg2 === " " ? (
+              <AInput
+                name="password"
+                value={registerPassword}
+                placeholder="비밀번호를 입력해주세요"
+                onChange={onChange}
+              ></AInput>
+            ) : (
+              <ErrorInput
+                name="password"
+                value={registerPassword}
+                placeholder="비밀번호를 입력해주세요"
+                onChange={onChange}
+              ></ErrorInput>
+            )}
+            <ErrMsg2>{errorMsg2}</ErrMsg2>
+          </SemiBox>
+          <SemiBox>
+            <AText>닉네임</AText>
+            {isName ? (
+              <AInput
+                name="displayName"
+                value={displayName}
+                placeholder="닉네임을 입력해주세요"
+                onChange={onChange}
+              ></AInput>
+            ) : (
+              <ErrorInput
+                name="displayName"
+                value={displayName}
+                placeholder="닉네임을 입력해주세요"
+                onChange={onChange}
+              ></ErrorInput>
+            )}
+          </SemiBox>
+          <BtnBox>
+            {!registerEmail || !registerPassword || !displayName ? (
+              <InvalidBtn>회원가입</InvalidBtn>
+            ) : (
+              <ValidBtn onClick={signup}>회원가입</ValidBtn>
+            )}
+
+            <ErrMsg3>{errorMsg3}</ErrMsg3>
+          </BtnBox>
+        </Box>
+      </Wrap>
     </Container>
   );
 };
@@ -184,6 +221,18 @@ const BtnBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const InvalidBtn = styled.div`
+  border: 2px solid #e6e6e6;
+  background-color: #e6e6e6;
+  padding: 0.5vh 3vw;
+  border-radius: 10px;
+  width: 70%;
+  height: 4vh;
+  text-align: center;
+  line-height: 4vh;
+  font-weight: bold;
 `;
 
 const ValidBtn = styled.div`
