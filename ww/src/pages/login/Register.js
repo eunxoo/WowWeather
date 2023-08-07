@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   firebaseAuth,
   createUserWithEmailAndPassword,
   sendEmailVerification,
   updateProfile,
 } from "../../fbase";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
