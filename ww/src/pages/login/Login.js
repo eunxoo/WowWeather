@@ -4,18 +4,15 @@ import styled from "styled-components";
 import { PiDotsThreeVertical } from "react-icons/pi";
 import GoogleLogin from "./GoogleLogin";
 import { firebaseAuth, signInWithEmailAndPassword } from "../../fbase";
-import { onAuthStateChanged } from "@firebase/auth";
 
 const Login = () => {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  const [user, setUser] = useState({});
   // onAuthStateChanged(firebaseAuth, (currentUser) => {
   //   setUser(currentUser);
   // });
   const navigate = useNavigate();
-  const signIn = async (e) => {
-    e.preventDefault();
+  const signIn = async () => {
     try {
       const user = await signInWithEmailAndPassword(
         firebaseAuth,
@@ -23,7 +20,6 @@ const Login = () => {
         loginPassword
       );
       console.log(user);
-      setUser(user.user);
       if (!user.user.emailVerified) {
         alert("이메일 인증을 해주세요.");
       } else {
@@ -37,6 +33,12 @@ const Login = () => {
   // const logout = async () => {
   //   await signOut(firebaseAuth);
   // };
+
+  const onCheckEnter = (e) => {
+    if (e.key === "Enter") {
+      signIn();
+    }
+  };
 
   return (
     <Container>
@@ -56,6 +58,7 @@ const Login = () => {
             setLoginPassword(e.target.value);
           }}
           placeholder="비밀번호"
+          onKeyPress={onCheckEnter}
         />
         <LoginBtn onClick={signIn}>로그인</LoginBtn>
       </Box>
