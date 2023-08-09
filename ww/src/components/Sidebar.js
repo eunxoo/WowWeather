@@ -35,9 +35,21 @@ const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj }) => {
     window.location.replace("/");
   };
 
+  const dn = userObj.displayName;
+  // console.log(typeof dn);
+  let dname = "";
+  if (dn.length >= 4) {
+    dname = dn[0] + dn[1] + dn[2] + dn[3] + ".. ";
+  } else {
+    dname = dn;
+  }
+
   return (
     <Container className={isOpen ? "open" : ""} ref={outside}>
-      <MdClose className="close" onClick={toggleSide} />
+      <Wrap>
+        <Box>{dname + " 님, 안녕하세요!"}</Box>
+        <MdClose className="close" onClick={toggleSide} />
+      </Wrap>
       <ul className="ul">
         <Menu isActive={location.pathname === "/"}>
           <MdNavigateNext className="in" />
@@ -59,7 +71,6 @@ const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj }) => {
         </Menu>
       </ul>
       <SignOut onClick={logout}>로그아웃</SignOut>
-      <Box>{userObj.displayName + "님, 안녕하세요!"}</Box>
     </Container>
   );
 };
@@ -91,7 +102,7 @@ const Container = styled.div`
   .ul {
     list-style: none;
     padding-left: 0;
-    margin: 6vh 0.5vw;
+    margin: 10vh 0.5vw;
   }
 `;
 const Menu = styled.li`
@@ -103,7 +114,7 @@ const Menu = styled.li`
 
   margin-bottom: 3vh;
   margin-left: ${(props) =>
-    props.isActive ? "3vw" : "0"}; // 주소가 일치할 때만 들여쓰기를 적용
+    props.isActive ? "4vw" : "0"}; // 주소가 일치할 때만 들여쓰기를 적용
   /* transition: padding-left 0.3s ease-in-out; */
 
   /* &:hover {
@@ -127,6 +138,16 @@ const SignOut = styled.div`
 `;
 const Box = styled.div`
   position: absolute;
-  bottom: 3.5vh;
-  left: 3vw;
+  margin-left: 3vw;
+  padding-left: 7vw;
+  top: 0.8vh;
+  font-size: 2vh;
+  width: 100vw;
+`;
+
+const Wrap = styled.div`
+  position: absolute;
+  top: 2vh;
+  display: flex;
+  flex-direction: row;
 `;
