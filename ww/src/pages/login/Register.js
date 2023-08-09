@@ -166,7 +166,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-items: center;
-
+  height: auto;
   .arrow {
     position: absolute;
   }

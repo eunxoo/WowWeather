@@ -53,7 +53,8 @@ const App = () => {
 export default App;
 
 const Footer = styled.div`
-  position: absolute;
-  bottom: 0;
+  margin-top: 3vh;
+  position: relative;
+  transform: translateY(-100%);
   font-size: 0.5vh;
 `;
