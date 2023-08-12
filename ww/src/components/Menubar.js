@@ -34,13 +34,13 @@ const Menubar = ({ userObj }) => {
   };
   return (
     <Container>
+      <MenuDiv onClick={toggleSide}></MenuDiv>
       <Wrap>
-        <Navbar className={`nav ${isShow && "navNone"}`}></Navbar>
         <GiHamburgerMenu
           className={`hamburger ${isShow && "hamburgerNone"}`}
           role="button"
-          onClick={toggleSide}
         />
+        <Navbar className={`nav ${isShow && "navNone"}`}></Navbar>
       </Wrap>
       <Outlet />
       <Sidebar
@@ -66,6 +66,16 @@ const Container = styled.div`
   }
 `;
 
+const MenuDiv = styled.button`
+  position: absolute;
+  top: 1vh;
+  left: 3vw;
+  height: 4vh;
+  width: 4vh;
+  z-index: 9;
+  opacity: 0;
+`;
+
 const Wrap = styled.div`
   height: 5vh;
   width: 100%;
@@ -80,11 +90,12 @@ const Wrap = styled.div`
     top: 1vh;
     left: 3vw;
     font-size: 4vh;
-    z-index: 5;
+    z-index: 4;
   }
 
   .hamburgerNone {
     display: none;
+    z-index: 5;
   }
 `;
 
