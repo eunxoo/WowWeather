@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const weather = require("./server/weather");
+const NowWeather = require("./server/NowWeather");
+const TodayWeather = require("./server/TodayWeather");
 const PORT = 8000;
 require("dotenv").config({ path: "./.env" });
 
@@ -15,7 +16,8 @@ app.use(
   })
 );
 
-app.post("/todayweather", weather);
+app.post("/nowweather", NowWeather);
+app.post("/todayweather", TodayWeather);
 
 app.get("/data", function (req, res) {
   const data = {
