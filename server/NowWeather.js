@@ -23,11 +23,11 @@ module.exports = async (req, res) => {
     return hour + "" + "30";
   };
 
-  const { lat, lon } = req.body;
+  const { lat, lon, fields } = req.body;
   const toXYconvert = toXY(lat, lon);
 
   const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst`;
-  const SERVICE_KEY = process.env.OPENAPI_KEY;
+  const SERVICE_KEY = process.env.W_OPENAPI_KEY;
   console.log(req.body);
   const apiUrl =
     url +
@@ -48,10 +48,15 @@ module.exports = async (req, res) => {
   axios
     .get(apiUrl)
     .then((response) => {
-      console.log(response.data);
-      console.log(response.data.response.body);
-      console.log(response.data.response.body.items.item);
-      res.send(response.data.response.body.items.item);
+      const selectedFields = fields || ["T1H", "SKY", "PTY"]; // 기본 필드 설정
+      const selectedItems = response.data.response.body.items.item.filter(
+        (item) => selectedFields.includes(item.category)
+      );
+      // console.log(response.data);
+      // console.log(response.data.response.body);
+      // console.log(response.data.response.body.items.item);
+      // res.send(response.data.response.body.items.item);
+      res.send(selectedItems);
     })
     .catch((error) => {
       console.error(error);
