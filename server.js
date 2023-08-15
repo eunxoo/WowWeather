@@ -3,8 +3,9 @@ const app = express();
 const cors = require("cors");
 const NowWeather = require("./server/NowWeather");
 const TodayWeather = require("./server/TodayWeather");
+const YesWeather = require("./server/YesWeather");
+const AddressConvert = require("./server/AddressConvert");
 const PORT = 8000;
-require("dotenv").config({ path: "./.env" });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -18,6 +19,8 @@ app.use(
 
 app.post("/nowweather", NowWeather);
 app.post("/todayweather", TodayWeather);
+app.post("/yesweather", YesWeather);
+app.get("/convert", AddressConvert);
 
 app.get("/data", function (req, res) {
   const data = {
