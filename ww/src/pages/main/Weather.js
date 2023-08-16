@@ -6,7 +6,7 @@ import Address from "./Address";
 const Weather = () => {
   const url = "http://localhost:8000";
 
-  const [dataReady, setDataReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
@@ -60,106 +60,99 @@ const Weather = () => {
         setLatitude(lat);
         setLongitude(lon);
 
-        fetchData("/nowweather", lat, lon, ["T1H", "SKY", "PTY"])
-          .then((res) => {
-            console.log(res.data);
-            const nowT1H = res.data.find((item) => item.category === "T1H");
-            const nowSky = res.data.find((item) => item.category === "SKY");
-            const nowPTY = res.data.find((item) => item.category === "PTY");
-
-            if (nowT1H) {
-              setTemperature(nowT1H.fcstValue);
-              console.log(nowT1H.category);
-              console.log(nowT1H.fcstValue);
-            }
-
-            if (nowSky) {
-              setSky(nowSky.fcstValue);
-              console.log(nowSky.category);
-              console.log(nowSky.fcstValue);
-            }
-
-            if (nowPTY) {
-              setRain(nowPTY.fcstValue);
-              console.log(nowPTY.category);
-              console.log(nowPTY.fcstValue);
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching nowweather:", error);
-          });
-
-        fetchData("/todayweather", lat, lon, ["TMN", "TMX"])
-          .then((res) => {
-            console.log(res.data);
-            const tmnItem = res.data.find((item) => item.category === "TMN");
-            const tmxItem = res.data.find((item) => item.category === "TMX");
-
-            if (tmnItem) {
-              const tmnValue = parseFloat(tmnItem.fcstValue);
-              setMin(
-                Number.isInteger(tmnValue)
-                  ? tmnValue.toString()
-                  : tmnValue.toFixed(1)
+        Promise.all([
+          fetchData("/nowweather", lat, lon, ["T1H", "SKY", "PTY"]),
+          fetchData("/todayweather", lat, lon, ["TMN", "TMX"]),
+          fetchData("/nowdust", lat, lon),
+          fetchData("/yesweather", lat, lon, ["T1H"]),
+        ])
+          .then(
+            ([nowWeatherRes, todayWeatherRes, nowDustRes, yesWeatherRes]) => {
+              // ... (날씨 데이터 처리)
+              const nowT1H = nowWeatherRes.data.find(
+                (item) => item.category === "T1H"
               );
-            }
-
-            if (tmxItem) {
-              const tmxValue = parseFloat(tmxItem.fcstValue);
-              setMax(
-                Number.isInteger(tmxValue)
-                  ? tmxValue.toString()
-                  : tmxValue.toFixed(1)
+              const nowSky = nowWeatherRes.data.find(
+                (item) => item.category === "SKY"
               );
+              const nowPTY = nowWeatherRes.data.find(
+                (item) => item.category === "PTY"
+              );
+              if (nowT1H) {
+                setTemperature(nowT1H.fcstValue);
+                console.log(nowT1H.category);
+                console.log(nowT1H.fcstValue);
+              }
+
+              if (nowSky) {
+                setSky(nowSky.fcstValue);
+                console.log(nowSky.category);
+                console.log(nowSky.fcstValue);
+              }
+
+              if (nowPTY) {
+                setRain(nowPTY.fcstValue);
+                console.log(nowPTY.category);
+                console.log(nowPTY.fcstValue);
+              }
+
+              // ... (오늘의 최저 및 최고 기온 데이터 처리)
+              const tmnItem = todayWeatherRes.data.find(
+                (item) => item.category === "TMN"
+              );
+              const tmxItem = todayWeatherRes.data.find(
+                (item) => item.category === "TMX"
+              );
+              if (tmnItem) {
+                const tmnValue = parseFloat(tmnItem.fcstValue);
+                setMin(
+                  Number.isInteger(tmnValue)
+                    ? tmnValue.toString()
+                    : tmnValue.toFixed(1)
+                );
+              }
+
+              if (tmxItem) {
+                const tmxValue = parseFloat(tmxItem.fcstValue);
+                setMax(
+                  Number.isInteger(tmxValue)
+                    ? tmxValue.toString()
+                    : tmxValue.toFixed(1)
+                );
+              }
+
+              // ... (미세먼지 데이터 처리)
+              const pm25Grade1h = getGrade(nowDustRes.data.pm25Grade1h);
+              const pm10Grade1h = getGrade(nowDustRes.data.pm10Grade1h);
+              setDust(pm10Grade1h || "-"); // 만약 null이면 "-"로 설정
+              setSDust(pm25Grade1h || "-");
+
+              // ... (어제 기온 데이터 처리)
+              const yesT1H = yesWeatherRes.data.find(
+                (item) => item.category === "T1H"
+              );
+              if (yesT1H) {
+                setYTemperature(yesT1H.fcstValue);
+                console.log(yesT1H.category);
+                console.log(yesT1H.fcstValue);
+              }
+              let temperatureDiff = yTemperature - temperature;
+              let newMessage = "";
+
+              if (temperatureDiff < 0) {
+                newMessage = `어제보다 ${Math.abs(temperatureDiff)}도 높아요`;
+              } else if (temperatureDiff > 0) {
+                newMessage = `어제보다 ${temperatureDiff}도 낮아요`;
+              } else {
+                newMessage = "어제와 같아요";
+              }
+
+              setMessage(newMessage);
+              setIsLoading(false);
             }
-          })
+          )
           .catch((error) => {
-            console.error("Error fetching todayweather:", error);
-          })
-          .finally(() => {
-            // 데이터가 모두 준비되었음을 표시
-            setDataReady(true);
-          });
-
-        fetchData("/nowdust", lat, lon)
-          .then((res) => {
-            console.log(res.data);
-
-            const pm25Grade1h = getGrade(res.data.pm25Grade1h);
-            const pm10Grade1h = getGrade(res.data.pm10Grade1h);
-
-            setDust(pm10Grade1h || "-"); // 만약 null이면 "-"로 설정
-            setSDust(pm25Grade1h || "-");
-          })
-          .catch((error) => {
-            console.error("Error fetching nowdust:", error);
-          });
-
-        fetchData("/yesweather", lat, lon, ["T1H"])
-          .then((res) => {
-            console.log(res.data);
-            const yesT1H = res.data.find((item) => item.category === "T1H");
-
-            if (yesT1H) {
-              setYTemperature(yesT1H.fcstValue);
-              console.log(yesT1H.category);
-              console.log(yesT1H.fcstValue);
-            }
-            let temperatureDiff = yTemperature - temperature;
-            let newMessage = "";
-
-            if (temperatureDiff < 0) {
-              newMessage = `어제보다 ${Math.abs(temperatureDiff)}도 높아요`;
-            } else if (temperatureDiff > 0) {
-              newMessage = `어제보다 ${temperatureDiff}도 낮아요`;
-            } else {
-              newMessage = "어제와 같아요";
-            }
-
-            setMessage(newMessage);
-          })
-          .catch((error) => {
-            console.error("Error fetching todayweather:", error);
+            console.error("Error fetching data:", error);
           });
       });
     }
@@ -170,51 +163,51 @@ const Weather = () => {
   }, [rain, sky]);
 
   const selectFeature = () => {
-    if (rain == "0") {
-      if (sky == "1") {
+    if (rain === "0") {
+      if (sky === "1") {
         setFeature("맑음");
-      } else if (sky == "2") {
+      } else if (sky === "2") {
         setFeature("구름조금");
-      } else if (sky == "3") {
+      } else if (sky === "3") {
         setFeature("구름많음");
-      } else if (sky == "4") {
+      } else if (sky === "4") {
         setFeature("흐림");
       }
-    } else if (rain == "1") {
+    } else if (rain === "1") {
       setFeature("비");
-    } else if (rain == "2") {
+    } else if (rain === "2") {
       setFeature("비/눈");
-    } else if (rain == "3") {
+    } else if (rain === "3") {
       setFeature("눈");
-    } else if (rain == "5") {
+    } else if (rain === "5") {
       setFeature("빗방울");
-    } else if (rain == "6") {
+    } else if (rain === "6") {
       setFeature("빗방울눈날림");
-    } else if (rain == "7") {
+    } else if (rain === "7") {
       setFeature("눈날림");
     }
   };
 
   return (
     <Container>
-      {dataReady && (
-        <>
-          <NowWrap>
-            <Address latitude={latitude} longitude={longitude} />
-            <Location></Location>
-            <Temp>{temperature}</Temp>
-            <Feature>{feature}</Feature>
-            <MinMax>
-              최저: {min} 최고: {max}
-            </MinMax>
-            <Dust>{`미세먼지: ${dust} 초미세먼지: ${sdust}`}</Dust>
-            <CompareWithYesterday>{message}</CompareWithYesterday>
-          </NowWrap>
-          <TodayWrap>
-            <Todays></Todays>
-          </TodayWrap>
-        </>
+      {isLoading ? (
+        <LoadingIndicator>로딩 중...</LoadingIndicator>
+      ) : (
+        <NowWrap>
+          <Address latitude={latitude} longitude={longitude} />
+          <Location></Location>
+          <Temp>{temperature}</Temp>
+          <Feature>{feature}</Feature>
+          <MinMax>
+            최저: {min} 최고: {max}
+          </MinMax>
+          <Dust>{`미세먼지: ${dust} 초미세먼지: ${sdust}`}</Dust>
+          <CompareWithYesterday>{message}</CompareWithYesterday>
+        </NowWrap>
       )}
+      <TodayWrap>
+        <Todays></Todays>
+      </TodayWrap>
     </Container>
   );
 };
@@ -225,6 +218,8 @@ const Container = styled.div`
   height: 100%;
   padding-top: 6vh;
 `;
+
+const LoadingIndicator = styled.div``;
 
 const NowWrap = styled.div``;
 
