@@ -163,28 +163,45 @@ const Weather = () => {
   }, [rain, sky]);
 
   const selectFeature = () => {
-    if (rain === "0") {
-      if (sky === "1") {
-        setFeature("맑음");
-      } else if (sky === "2") {
-        setFeature("구름조금");
-      } else if (sky === "3") {
-        setFeature("구름많음");
-      } else if (sky === "4") {
-        setFeature("흐림");
-      }
-    } else if (rain === "1") {
-      setFeature("비");
-    } else if (rain === "2") {
-      setFeature("비/눈");
-    } else if (rain === "3") {
-      setFeature("눈");
-    } else if (rain === "5") {
-      setFeature("빗방울");
-    } else if (rain === "6") {
-      setFeature("빗방울눈날림");
-    } else if (rain === "7") {
-      setFeature("눈날림");
+    switch (rain) {
+      case "0":
+        switch (sky) {
+          case "1":
+            setFeature("맑음");
+            break;
+          case "2":
+            setFeature("구름조금");
+            break;
+          case "3":
+            setFeature("구름많음");
+            break;
+          case "4":
+            setFeature("흐림");
+            break;
+          default:
+            setFeature("");
+        }
+        break;
+      case "1":
+        setFeature("비");
+        break;
+      case "2":
+        setFeature("비/눈");
+        break;
+      case "3":
+        setFeature("눈");
+        break;
+      case "5":
+        setFeature("빗방울");
+        break;
+      case "6":
+        setFeature("빗방울눈날림");
+        break;
+      case "7":
+        setFeature("눈날림");
+        break;
+      default:
+        setFeature("");
     }
   };
 
