@@ -26,7 +26,6 @@ module.exports = async (req, res) => {
     axios.get(apiUrl).then((response) => {
       // console.log(response.data);
       // console.log(response.data.response.body);
-      console.log("gg" + response.data.response.body.items);
       response.data.response.body.items.forEach((item) => {
         console.log("Item:", item);
       });
