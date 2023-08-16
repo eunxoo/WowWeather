@@ -5,6 +5,7 @@ const NowWeather = require("./server/NowWeather");
 const TodayWeather = require("./server/TodayWeather");
 const YesWeather = require("./server/YesWeather");
 const AddressConvert = require("./server/AddressConvert");
+const DustWeather = require("./server/DustWeather");
 const PORT = 8000;
 
 app.use(express.json());
@@ -21,6 +22,7 @@ app.post("/nowweather", NowWeather);
 app.post("/todayweather", TodayWeather);
 app.post("/yesweather", YesWeather);
 app.get("/convert", AddressConvert);
+app.post("/nowdust", DustWeather);
 
 app.get("/data", function (req, res) {
   const data = {

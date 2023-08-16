@@ -29,13 +29,19 @@ const Address = ({ latitude, longitude }) => {
         });
     }
   }, [latitude, longitude]);
-
   return (
     <div>
       {convertedAddress && (
         <div>
-          <div>{convertedAddress.region_1depth_name}</div>
-          <div>{convertedAddress.region_2depth_name}</div>
+          {convertedAddress.region_1depth_name && (
+            <div>{convertedAddress.region_1depth_name}</div>
+          )}
+          {convertedAddress.region_2depth_name && (
+            <div>{convertedAddress.region_2depth_name}</div>
+          )}
+          {convertedAddress.region_3depth_name && (
+            <div>{convertedAddress.region_3depth_name}</div>
+          )}
         </div>
       )}
       {/* <div>
