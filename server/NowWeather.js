@@ -1,6 +1,6 @@
 const { toXY } = require("./XyConvert");
 const axios = require("axios");
-require("dotenv").config({ path: "../.env" });
+require("dotenv").config({ path: "/Users/eunsoo/Desktop/WowWeather/.env" });
 
 module.exports = async (req, res) => {
   console.log("NowWeather.js 서버");
@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
   const toXYconvert = toXY(lat, lon);
 
   const url = `http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst`;
-  const SERVICE_KEY = process.env.W_OPENAPI_KEY;
+  const SERVICE_KEY = process.env.OPENAPI_KEY;
   console.log(req.body);
   const apiUrl =
     url +
