@@ -5,17 +5,6 @@ import Address from "./Address";
 
 const Weather = () => {
   const url = "http://localhost:8000";
-  const [data, setData] = useState({});
-  const fetchApi = () => {
-    fetch("/data")
-      .then((res) => res.json())
-      .then(
-        (data) => setData(data),
-        () => {
-          console.log("data read : ", data);
-        }
-      );
-  };
 
   const [dataReady, setDataReady] = useState(false);
 
@@ -29,8 +18,25 @@ const Weather = () => {
   const [min, setMin] = useState(""); // today
   const [max, setMax] = useState(""); // today
   const [dust, setDust] = useState(""); //
+  const [sdust, setSDust] = useState(""); //
   const [yTemperature, setYTemperature] = useState(""); //
   const [message, setMessage] = useState("");
+
+  // pm25Grade1h 및 pm10Grade1h 값을 변환하여 등급으로 표시하는 함수
+  const getGrade = (value) => {
+    switch (value) {
+      case "1":
+        return "좋음";
+      case "2":
+        return "보통";
+      case "3":
+        return "나쁨";
+      case "4":
+        return "매우나쁨";
+      default:
+        return "";
+    }
+  };
 
   const fetchData = (apiEndpoint, lat, lon) => {
     return axios({
@@ -109,6 +115,24 @@ const Weather = () => {
           })
           .catch((error) => {
             console.error("Error fetching todayweather:", error);
+          })
+          .finally(() => {
+            // 데이터가 모두 준비되었음을 표시
+            setDataReady(true);
+          });
+
+        fetchData("/nowdust", lat, lon)
+          .then((res) => {
+            console.log(res.data);
+
+            const pm25Grade1h = getGrade(res.data.pm25Grade1h);
+            const pm10Grade1h = getGrade(res.data.pm10Grade1h);
+
+            setDust(pm10Grade1h || "-"); // 만약 null이면 "-"로 설정
+            setSDust(pm25Grade1h || "-");
+          })
+          .catch((error) => {
+            console.error("Error fetching nowdust:", error);
           });
 
         fetchData("/yesweather", lat, lon, ["T1H"])
@@ -136,10 +160,6 @@ const Weather = () => {
           })
           .catch((error) => {
             console.error("Error fetching todayweather:", error);
-          })
-          .finally(() => {
-            // 데이터가 모두 준비되었음을 표시
-            setDataReady(true);
           });
       });
     }
@@ -187,7 +207,7 @@ const Weather = () => {
             <MinMax>
               최저: {min} 최고: {max}
             </MinMax>
-            <Dust></Dust>
+            <Dust>{`미세먼지: ${dust} 초미세먼지: ${sdust}`}</Dust>
             <CompareWithYesterday>{message}</CompareWithYesterday>
           </NowWrap>
           <TodayWrap>
