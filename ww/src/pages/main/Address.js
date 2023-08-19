@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import styled from "styled-components";
+import { MdMyLocation } from "react-icons/md";
 
 const Address = ({ latitude, longitude }) => {
   const [convertedAddress, setConvertedAddress] = useState("");
@@ -30,31 +32,44 @@ const Address = ({ latitude, longitude }) => {
     }
   }, [latitude, longitude]);
   return (
-    <div>
+    <Container>
+      {/* <MdMyLocation className="myLocation" /> */}
       {convertedAddress && (
-        <div>
+        <Box>
           {convertedAddress.region_1depth_name && (
-            <div>{convertedAddress.region_1depth_name}</div>
+            <AddressDiv>{convertedAddress.region_1depth_name}</AddressDiv>
           )}
           {convertedAddress.region_2depth_name && (
-            <div>{convertedAddress.region_2depth_name}</div>
+            <AddressDiv>{convertedAddress.region_2depth_name}</AddressDiv>
           )}
           {convertedAddress.region_3depth_name && (
-            <div>{convertedAddress.region_3depth_name}</div>
+            <AddressDiv>{convertedAddress.region_3depth_name}</AddressDiv>
           )}
-        </div>
+        </Box>
       )}
-      {/* <div>
-        <label>Latitude: {latitude}</label>
-      </div>
-      <div>
-        <label>Longitude: {longitude}</label>
-      </div>
-      <button onClick={handleConvertClick}>Convert</button>
-      {convertedAddress && <div>Converted Address: {convertedAddress}</div>}
-      {error && <div style={{ color: "red" }}>{error}</div>} */}
-    </div>
+    </Container>
   );
 };
 
 export default Address;
+
+const Container = styled.div`
+  position: relative;
+  /* display: flex;
+  flex-direction: row; */
+  .myLocation {
+    /* position: absolute; */
+  }
+`;
+const Box = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  align-content: space-around;
+  justify-content: center;
+`;
+const AddressDiv = styled.div`
+  margin-right: 4px;
+  font-size: 15px;
+  -webkit-text-size-adjust: none;
+`;
