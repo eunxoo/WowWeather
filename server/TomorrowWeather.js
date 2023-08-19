@@ -3,7 +3,7 @@ const axios = require("axios");
 require("dotenv").config({ path: "/Users/eunsoo/Desktop/WowWeather/.env" });
 
 module.exports = async (req, res) => {
-  console.log("TodayWeather.js 서버");
+  console.log("TomorrowWeather.js 서버");
 
   const getYesterdayDate = () => {
     let yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
@@ -11,6 +11,16 @@ module.exports = async (req, res) => {
     let mm = yesterday.getMonth() + 1;
     mm = mm < 10 ? "0" + mm.toString() : mm.toString();
     let dd = yesterday.getDate();
+    dd = dd < 10 ? "0" + dd.toString() : dd.toString();
+    return yyyy + mm + dd;
+  };
+
+  const getTomorrowDate = () => {
+    let tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+    let yyyy = tomorrow.getFullYear().toString();
+    let mm = tomorrow.getMonth() + 1;
+    mm = mm < 10 ? "0" + mm.toString() : mm.toString();
+    let dd = tomorrow.getDate();
     dd = dd < 10 ? "0" + dd.toString() : dd.toString();
     return yyyy + mm + dd;
   };
@@ -40,13 +50,17 @@ module.exports = async (req, res) => {
   axios
     .get(apiUrl)
     .then((response) => {
-      const selectedFields = fields || ["TMN", "TMX", "TMP", "SKY", "PTY"]; // 기본 필드 설정
+      const selectedFields = fields || ["TMP", "SKY", "PTY"]; // 기본 필드 설정
+      const selectedDate = getTomorrowDate();
+
       const selectedItems = response.data.response.body.items.item.filter(
-        (item) => selectedFields.includes(item.category)
+        (item) =>
+          selectedFields.includes(item.category) &&
+          item.fcstDate === selectedDate
       );
       // console.log(response.data);
       // console.log(response.data.response.body);
-      // console.log(response.data.response.body.items.item);
+      console.log(selectedItems);
       // res.send(response.data.response.body.items.item);
       res.send(selectedItems);
     })

@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
       // console.log(response.data);
       // console.log(response.data.response.body);
       response.data.response.body.items.forEach((item) => {
-        console.log("Item:", item);
+        // console.log("Item:", item);
       });
 
       const items = response.data.response.body.items;
