@@ -46,24 +46,24 @@ const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj }) => {
 
   return (
     <Container className={isOpen ? "open" : ""} ref={outside}>
-      <Wrap>
-        <Box>{dname + " 님, 안녕하세요!"}</Box>
+      <Box>{dname + " 님, 안녕하세요!"}</Box>
+      <CloseDiv>
         <MdClose className="close" onClick={toggleSide} />
-      </Wrap>
+      </CloseDiv>
       <ul className="ul">
-        <Menu isActive={location.pathname === "/"}>
+        <Menu $isActive={location.pathname === "/"}>
           <MdNavigateNext className="in" />
           <Link className="link" to="/" onClick={toggleSide}>
             홈
           </Link>
         </Menu>
-        <Menu isActive={location.pathname === "/checklist"}>
+        <Menu $isActive={location.pathname === "/checklist"}>
           <MdNavigateNext className="in" />
           <Link className="link" to="/checklist" onClick={toggleSide}>
             체크리스트
           </Link>
         </Menu>
-        <Menu isActive={location.pathname === "/mystyle"}>
+        <Menu $isActive={location.pathname === "/mystyle"}>
           <MdNavigateNext className="in" />
           <Link className="link" to="/mystyle" onClick={toggleSide}>
             나의 스타일
@@ -95,10 +95,6 @@ const Container = styled.div`
     height: 100%;
   }
 
-  .close {
-    font-size: 4vh;
-  }
-
   .ul {
     list-style: none;
     padding-left: 0;
@@ -114,7 +110,7 @@ const Menu = styled.li`
 
   margin-bottom: 3vh;
   margin-left: ${(props) =>
-    props.isActive ? "4vw" : "0"}; // 주소가 일치할 때만 들여쓰기를 적용
+    props.$isActive ? "4vw" : "0"}; // 주소가 일치할 때만 들여쓰기를 적용
   /* transition: padding-left 0.3s ease-in-out; */
 
   /* &:hover {
@@ -124,6 +120,15 @@ const Menu = styled.li`
   .in {
     position: relative;
     top: 2px;
+  }
+`;
+
+const CloseDiv = styled.div`
+  z-index: 10;
+  position: relative;
+  left: 85%;
+  .close {
+    font-size: 4vh;
   }
 `;
 
@@ -138,9 +143,9 @@ const SignOut = styled.div`
 `;
 const Box = styled.div`
   position: absolute;
-  margin-left: 3vw;
-  padding-left: 7vw;
-  top: 0.8vh;
+  margin-left: 0vw;
+  padding-left: 0vw;
+  top: 2vh;
   font-size: 2vh;
   width: 100vw;
 `;
