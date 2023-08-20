@@ -1,9 +1,12 @@
 const { toXY } = require("./XyConvert");
 const axios = require("axios");
+const Redis = require("ioredis");
 require("dotenv").config({ path: "/Users/eunsoo/Desktop/WowWeather/.env" });
 
+const redis = new Redis();
+
 module.exports = async (req, res) => {
-  console.log("NowWeather.js 서버");
+  console.log("YesWeather.js 서버");
 
   const getYesterdayDate = () => {
     let yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000 - 45 * 60 * 1000);
@@ -45,21 +48,46 @@ module.exports = async (req, res) => {
     toXYconvert.x +
     "&ny=" +
     toXYconvert.y;
-  axios
-    .get(apiUrl)
-    .then((response) => {
-      const selectedFields = fields || ["T1H"]; // 기본 필드 설정
+
+  const cacheKey = `${lat}-${lon}-${getYesterdayDate()}-${getBaseTime()}`;
+
+  try {
+    const cachedData = await redis.get(cacheKey);
+
+    if (cachedData) {
+      res.send(JSON.parse(cachedData));
+    } else {
+      const response = await axios.get(apiUrl);
+
+      const selectedFields = fields || ["T1H"];
       const selectedItems = response.data.response.body.items.item.filter(
         (item) => selectedFields.includes(item.category)
       );
 
+      await redis.setex(cacheKey, 86400, JSON.stringify(selectedItems)); // 유효시간: 24시간
+
       res.send(selectedItems);
-      // console.log(response.data);
-      // console.log(response.data.response.body);
-      // console.log(response.data.response.body.items.item);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
-    });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+
+  // axios
+  //   .get(apiUrl)
+  //   .then((response) => {
+  //     const selectedFields = fields || ["T1H"]; // 기본 필드 설정
+  //     const selectedItems = response.data.response.body.items.item.filter(
+  //       (item) => selectedFields.includes(item.category)
+  //     );
+
+  //     res.send(selectedItems);
+  //     // console.log(response.data);
+  //     // console.log(response.data.response.body);
+  //     // console.log(response.data.response.body.items.item);
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //     res.status(500).send("Internal Server Error");
+  //   });
 };

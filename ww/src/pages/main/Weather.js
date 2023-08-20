@@ -78,7 +78,7 @@ const Weather = () => {
           });
       });
     }
-  }, [responseW]);
+  }, []);
 
   return (
     <Container>
