@@ -1,6 +1,9 @@
 const { toXY } = require("./XyConvert");
 const axios = require("axios");
+const Redis = require("ioredis");
 require("dotenv").config({ path: "/Users/eunsoo/Desktop/WowWeather/.env" });
+
+const redis = new Redis();
 
 module.exports = async (req, res) => {
   console.log("TomorrowWeather.js 서버");
@@ -47,10 +50,18 @@ module.exports = async (req, res) => {
     toXYconvert.x +
     "&ny=" +
     toXYconvert.y;
-  axios
-    .get(apiUrl)
-    .then((response) => {
-      const selectedFields = fields || ["TMP", "SKY", "PTY"]; // 기본 필드 설정
+
+  const cacheKey = `${lat}-${lon}-${getYesterdayDate()}-2300`;
+
+  try {
+    const cachedData = await redis.get(cacheKey);
+
+    if (cachedData) {
+      res.send(JSON.parse(cachedData));
+    } else {
+      const response = await axios.get(apiUrl);
+
+      const selectedFields = fields || ["TMP", "SKY", "PTY"];
       const selectedDate = getTomorrowDate();
 
       const selectedItems = response.data.response.body.items.item.filter(
@@ -58,14 +69,35 @@ module.exports = async (req, res) => {
           selectedFields.includes(item.category) &&
           item.fcstDate === selectedDate
       );
-      // console.log(response.data);
-      // console.log(response.data.response.body);
-      console.log(selectedItems);
-      // res.send(response.data.response.body.items.item);
+
+      await redis.setex(cacheKey, 86400, JSON.stringify(selectedItems)); // 유효시간: 24시간
+
       res.send(selectedItems);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
-    });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+
+  // axios
+  //   .get(apiUrl)
+  //   .then((response) => {
+  //     const selectedFields = fields || ["TMP", "SKY", "PTY"]; // 기본 필드 설정
+  //     const selectedDate = getTomorrowDate();
+
+  //     const selectedItems = response.data.response.body.items.item.filter(
+  //       (item) =>
+  //         selectedFields.includes(item.category) &&
+  //         item.fcstDate === selectedDate
+  //     );
+  //     // console.log(response.data);
+  //     // console.log(response.data.response.body);
+  //     // console.log(selectedItems);
+  //     // res.send(response.data.response.body.items.item);
+  //     res.send(selectedItems);
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //     res.status(500).send("Internal Server Error");
+  //   });
 };
