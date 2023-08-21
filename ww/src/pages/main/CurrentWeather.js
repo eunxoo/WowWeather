@@ -2,16 +2,13 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Address from "./Address";
 
-const CurrentWeather = ({ responseW }) => {
+const CurrentWeather = ({ responseW, latitude, longitude }) => {
   // pm25Grade1h 및 pm10Grade1h 값을 변환하여 등급으로 표시하는 함수
   const nowWeatherRes = responseW.nowWeatherRes;
   const todayWeatherRes = responseW.todayWeatherRes;
   const nowDustRes = responseW.nowDustRes;
   const yesWeatherRes = responseW.yesWeatherRes;
-
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
-
+  console.log("lat" + latitude + "lon" + longitude);
   const [temperature, setTemperature] = useState(""); // 현재 시간 ~ +6시간 : now, 나머지 : today
   const [sky, setSky] = useState("");
   const [rain, setRain] = useState("");
@@ -22,6 +19,9 @@ const CurrentWeather = ({ responseW }) => {
   const [sdust, setSDust] = useState(""); //
   const [yTemperature, setYTemperature] = useState(""); //
   const [message, setMessage] = useState("");
+
+  const now = new Date();
+  const nowHours = now.getHours();
 
   const getGrade = (value) => {
     switch (value) {
@@ -66,6 +66,9 @@ const CurrentWeather = ({ responseW }) => {
         break;
       case "3":
         setFeature("눈");
+        break;
+      case "4":
+        setFeature("소나기");
         break;
       case "5":
         setFeature("빗방울");
@@ -151,29 +154,34 @@ const CurrentWeather = ({ responseW }) => {
     selectFeature(rain, sky);
   }, [rain, sky]);
   return (
-    <NowWrap>
-      <Address latitude={latitude} longitude={longitude} />
-      <Location></Location>
-      <Temp>{temperature}°</Temp>
+    <>
+      <NowWrap hours={nowHours}>
+        <Address latitude={latitude} longitude={longitude} hours={nowHours} />
+        <Temp>{temperature}°</Temp>
 
-      <Feature>{feature}</Feature>
-      <MinMax>{`최저: ${min}° / 최고: ${max}°`}</MinMax>
-      <Dust>{`미세먼지: ${dust} / 초미세먼지: ${sdust}`}</Dust>
-      <CompareWithYesterday>{message}</CompareWithYesterday>
-    </NowWrap>
+        <Feature>{feature}</Feature>
+        <MinMax>{`최저: ${min}° / 최고: ${max}°`}</MinMax>
+        <Dust>{`미세먼지: ${dust} / 초미세먼지: ${sdust}`}</Dust>
+        <CompareWithYesterday>{message}</CompareWithYesterday>
+      </NowWrap>
+    </>
   );
 };
 
 export default CurrentWeather;
 
 const NowWrap = styled.div`
-  margin-top: 5vh;
+  margin: 5vh auto;
   display: flex;
   flex-direction: column;
   text-align: center;
+  z-index: 4;
+  color: ${({ hours }) => {
+    return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
+      ? "white"
+      : "black";
+  }};
 `;
-
-const Location = styled.div``;
 
 const Temp = styled.div`
   display: flex;
@@ -190,15 +198,15 @@ const Feature = styled.div`
 `;
 
 const MinMax = styled.div`
-  font-size: 15px;
+  font-size: 16px;
   margin-bottom: 5px;
 `;
 
 const Dust = styled.div`
-  font-size: 15px;
+  font-size: 16px;
   margin-bottom: 5px;
 `;
 
 const CompareWithYesterday = styled.div`
-  font-size: 15px;
+  font-size: 16px;
 `;

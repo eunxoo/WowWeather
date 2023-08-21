@@ -18,6 +18,24 @@ module.exports = async (req, res) => {
     return yyyy + mm + dd;
   };
 
+  const getBaseTime = () => {
+    const currentHour = new Date().getHours();
+    const baseTimes = [2, 5, 8, 11, 14, 17, 20, 23];
+
+    // Find the nearest previous base time
+    let previousBaseTime = baseTimes[0];
+    for (let i = baseTimes.length - 1; i >= 0; i--) {
+      if (currentHour >= baseTimes[i]) {
+        previousBaseTime = baseTimes[i];
+        break;
+      }
+    }
+
+    return previousBaseTime < 10
+      ? "0" + previousBaseTime + "00"
+      : previousBaseTime + "00";
+  };
+
   const { lat, lon, fields } = req.body;
   const toXYconvert = toXY(lat, lon);
 
@@ -35,7 +53,7 @@ module.exports = async (req, res) => {
     "&base_date=" +
     getYesterdayDate() +
     "&base_time=" +
-    "2300" +
+    getBaseTime() +
     "&nx=" +
     toXYconvert.x +
     "&ny=" +
@@ -61,7 +79,6 @@ module.exports = async (req, res) => {
 
       // 캐시 데이터를 Redis에 저장 (유효기간: 24시간)
       await redis.setex(cacheKey, 24 * 60 * 60, JSON.stringify(selectedItems));
-
       res.send(selectedItems);
     }
   } catch (error) {
