@@ -6,6 +6,8 @@ import { firebaseAuth, signOut } from "../fbase";
 
 const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj }) => {
   const location = useLocation();
+  const nowHours = new Date().getHours();
+
   useEffect(() => {
     document.addEventListener("mousedown", handlerOutside);
     return () => {
@@ -45,25 +47,25 @@ const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj }) => {
   }
 
   return (
-    <Container className={isOpen ? "open" : ""} ref={outside}>
+    <Container className={isOpen ? "open" : ""} ref={outside} hours={nowHours}>
       <Box>{dname + " 님, 안녕하세요!"}</Box>
-      <CloseDiv>
+      <CloseDiv hours={nowHours}>
         <MdClose className="close" onClick={toggleSide} />
       </CloseDiv>
       <ul className="ul">
-        <Menu $isActive={location.pathname === "/"}>
+        <Menu $isActive={location.pathname === "/"} hours={nowHours}>
           <MdNavigateNext className="in" />
           <Link className="link" to="/" onClick={toggleSide}>
             홈
           </Link>
         </Menu>
-        <Menu $isActive={location.pathname === "/checklist"}>
+        <Menu $isActive={location.pathname === "/checklist"} hours={nowHours}>
           <MdNavigateNext className="in" />
           <Link className="link" to="/checklist" onClick={toggleSide}>
             체크리스트
           </Link>
         </Menu>
-        <Menu $isActive={location.pathname === "/mystyle"}>
+        <Menu $isActive={location.pathname === "/mystyle"} hours={nowHours}>
           <MdNavigateNext className="in" />
           <Link className="link" to="/mystyle" onClick={toggleSide}>
             나의 스타일
@@ -84,7 +86,16 @@ const Container = styled.div`
   top: 0;
   height: 100%;
   width: 60%;
-  background-color: #c2e9ff;
+  background-color: ${({ hours }) => {
+    return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
+      ? "white"
+      : "black";
+  }};
+  color: ${({ hours }) => {
+    return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
+      ? "black"
+      : "white";
+  }};
   padding: 2%;
   transition: 0.5s ease;
 
@@ -104,7 +115,11 @@ const Container = styled.div`
 const Menu = styled.li`
   .link {
     text-decoration-line: none;
-    color: black;
+    color: ${({ hours }) => {
+      return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
+        ? "black"
+        : "white";
+    }};
     list-style: none;
   }
 
@@ -129,6 +144,11 @@ const CloseDiv = styled.div`
   left: 85%;
   .close {
     font-size: 4vh;
+    color: ${({ hours }) => {
+      return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
+        ? "black"
+        : "white";
+    }};
   }
 `;
 
@@ -140,6 +160,7 @@ const SignOut = styled.div`
   border-radius: 10px;
   background-color: white;
   padding: 1vh 1vw;
+  color: black;
 `;
 const Box = styled.div`
   position: absolute;
