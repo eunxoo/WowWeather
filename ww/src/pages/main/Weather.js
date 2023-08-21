@@ -4,6 +4,7 @@ import axios from "axios";
 
 import TimeWeather from "./TimeWeather";
 import CurrentWeather from "./CurrentWeather";
+import Style from "../myStyle/Style";
 
 const Weather = () => {
   const url = "http://localhost:8000";
@@ -15,6 +16,11 @@ const Weather = () => {
   });
 
   const [isLoading, setIsLoading] = useState(true);
+
+  const currentDateTime = new Date();
+  const hours = currentDateTime.getHours();
+  // const [time, setTime] = useState("");
+  const [rain, setRain] = useState("");
 
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
@@ -69,7 +75,12 @@ const Weather = () => {
                 nowDustRes: nowDustRes.data,
                 yesWeatherRes: yesWeatherRes.data,
               });
-
+              const nowPTY = nowWeatherRes.data.find(
+                (item) => item.category === "PTY"
+              );
+              if (nowPTY) {
+                setRain(nowPTY.fcstValue);
+              }
               setIsLoading(false);
             }
           )
@@ -78,18 +89,23 @@ const Weather = () => {
           });
       });
     }
-  }, []);
+  }, [rain, hours]);
 
   return (
     <Container>
       {isLoading ? (
-        <LoadingIndicator>로딩 중...</LoadingIndicator>
+        <LogoImg src={"/images/logo/wowlogoreverse.gif"} />
       ) : (
-        <>
-          <CurrentWeather responseW={responseW} />
+        <WrapWeather rain={rain} hours={hours}>
+          <CurrentWeather
+            responseW={responseW}
+            latitude={latitude}
+            longitude={longitude}
+          />
 
           <TimeWeather responseW={responseW} />
-        </>
+          <Style />
+        </WrapWeather>
       )}
     </Container>
   );
@@ -98,11 +114,46 @@ const Weather = () => {
 export default Weather;
 
 const Container = styled.div`
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   padding-top: 6vh;
 `;
 
-const LoadingIndicator = styled.div``;
+const WrapWeather = styled.div`
+  background: ${({ rain, hours }) => {
+    console.log(`rain: ${rain} hours: ${hours}`);
+    if (rain == 0 && hours >= 4 && hours <= 19) {
+      return "linear-gradient(white 3.5%, #b4dfff)";
+    } else if (rain !== 0 && hours >= 4 && hours <= 19) {
+      return "linear-gradient(white 3.5%, #C6C6C6)";
+    } else if ((hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)) {
+      return "linear-gradient(black 3.5%, #0B0085)";
+    }
+  }};
+  height: 100vh;
+`;
+
+const LogoImg = styled.img`
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  /* top: calc(var(--vh, 1vh) * 50);
+  transform: translateY(-70%); */
+  /* width: 100%; */
+  height: 50vh;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+`;
 
 const TodayWrap = styled.div``;
 
