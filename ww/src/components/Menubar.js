@@ -6,6 +6,7 @@ import Sidebar from "./Sidebar";
 
 const Menubar = ({ userObj }) => {
   const [isShow, setIsShow] = useState(false);
+  const nowHours = new Date().getHours();
 
   const controlNavbar = () => {
     if (window.scrollY > 50) {
@@ -33,14 +34,17 @@ const Menubar = ({ userObj }) => {
     showModal();
   };
   return (
-    <Container>
+    <Container hours={nowHours}>
       <MenuDiv onClick={toggleSide}></MenuDiv>
-      <Wrap>
+      <Wrap hours={nowHours}>
         <GiHamburgerMenu
           className={`hamburger ${isShow && "hamburgerNone"}`}
           role="button"
         />
-        <Navbar className={`nav ${isShow && "navNone"}`}></Navbar>
+        <Navbar
+          hours={nowHours}
+          className={`nav ${isShow && "navNone"}`}
+        ></Navbar>
       </Wrap>
       <Outlet />
       <Sidebar
@@ -53,15 +57,15 @@ const Menubar = ({ userObj }) => {
   );
 };
 
-export default Menubar;
+export default React.memo(Menubar);
 
 const Container = styled.div`
   position: relative;
   .navNone {
     height: 30px;
     width: 100%;
-    display: none;
-    visibility: none;
+    /* display: none;
+    visibility: none; */
     opacity: 1;
   }
 `;
@@ -83,7 +87,7 @@ const Wrap = styled.div`
   top: 0;
   padding-bottom: 1vh;
   transition-timing-function: ease-in;
-  transition: 0.5s;
+  transition: 0.3s;
 
   .hamburger {
     position: absolute;
@@ -91,6 +95,12 @@ const Wrap = styled.div`
     left: 3vw;
     font-size: 4vh;
     z-index: 4;
+
+    color: ${({ hours }) => {
+      return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
+        ? "white"
+        : "black";
+    }};
   }
 
   .hamburgerNone {
@@ -100,13 +110,17 @@ const Wrap = styled.div`
 `;
 
 const Navbar = styled.div`
-  background-color: #c2e9ff;
-  opacity: 0.5;
+  background-color: ${({ hours }) => {
+    return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
+      ? "black"
+      : "white";
+  }};
+  /* opacity: 0.5; */
   height: 5vh;
   width: 100%;
   position: fixed;
   top: 0;
-  padding-bottom: 1vh;
+  padding-bottom: 3vh; // 수정해야할 수도 있음.. 낮에 확인해보기
   transition-timing-function: ease-in;
-  transition: 0.5s;
+  transition: 0.3s;
 `;
