@@ -5,49 +5,74 @@ const TimeWeather = ({ responseW }) => {
   const [weatherData, setWeatherData] = useState([]);
   const [weatherData2, setWeatherData2] = useState([]);
 
-  const selectFeature = (rain, sky) => {
+  const selectFeature = (rain, sky, time) => {
     let feat = "";
+    let icon = "";
     switch (rain) {
       case "0":
         switch (sky) {
           case "1":
             feat = "맑음";
+            {
+              time <= 1900 ? (icon = "01") : (icon = "011");
+            }
+
             break;
           case "2":
             feat = "구름 조금";
+            icon = "02";
+            {
+              time <= 1900 ? (icon = "02") : (icon = "021");
+            }
             break;
           case "3":
             feat = "구름 많음";
+            {
+              time <= 1900 ? (icon = "02") : (icon = "021");
+            }
             break;
           case "4":
             feat = "흐림";
+            icon = "04";
             break;
           default:
             feat = "";
+            icon = "";
         }
         break;
       case "1":
         feat = "비";
+        icon = "11";
         break;
       case "2":
         feat = "비 또는 눈";
+        icon = "12";
         break;
       case "3":
         feat = "눈";
+        icon = "13";
+        break;
+      case "4":
+        feat = "소나기";
+        icon = "12";
         break;
       case "5":
         feat = "빗방울";
+        icon = "11";
         break;
       case "6":
         feat = "빗방울과 눈 날림";
+        icon = "11";
         break;
       case "7":
         feat = "눈 날림";
+        icon = "13";
         break;
       default:
         feat = "";
+        icon = "";
     }
-    return feat;
+    return icon;
   };
 
   const convertTo12HourFormat = (timeString) => {
@@ -82,10 +107,12 @@ const TimeWeather = ({ responseW }) => {
   const sortedWeatherData = sortByTime(weatherData);
   const sortedWeatherData2 = sortByTime(weatherData2);
 
+  const now = new Date();
+  const nowHours = now.getHours();
+
   useEffect(() => {
     const processedWeatherData = {};
     const processedWeatherData2 = {};
-    const now = new Date();
 
     console.log("todayWeatherRes:", responseW.todayWeatherRes);
     console.log("tomorrowWeatherRes:", responseW.tomorrowWeatherRes);
@@ -97,7 +124,7 @@ const TimeWeather = ({ responseW }) => {
       const fcstDate = item.fcstDate;
 
       const forecastHour = parseInt(fcstTime.substr(0, 2), 10);
-      if (forecastHour > now.getHours() && forecastHour <= now.getHours() + 5) {
+      if (forecastHour > nowHours && forecastHour <= nowHours + 5) {
         if (!processedWeatherData[fcstTime]) {
           processedWeatherData[fcstTime] = {
             time: fcstTime,
@@ -123,10 +150,7 @@ const TimeWeather = ({ responseW }) => {
 
       const forecastHour = parseInt(fcstTime.substr(0, 2), 10);
 
-      if (
-        forecastHour >= now.getHours() + 6 &&
-        forecastHour <= now.getHours() + 24
-      ) {
+      if (forecastHour >= nowHours + 6 && forecastHour <= nowHours + 24) {
         if (!processedWeatherData[fcstTime]) {
           processedWeatherData[fcstTime] = {
             time: fcstTime,
@@ -143,7 +167,7 @@ const TimeWeather = ({ responseW }) => {
         }
       }
     });
-
+    console.log(processedWeatherData[1800]);
     responseW.tomorrowWeatherRes.forEach((item) => {
       const fcstTime = item.fcstTime;
       const category = item.category;
@@ -152,7 +176,7 @@ const TimeWeather = ({ responseW }) => {
 
       const forecastHour = parseInt(fcstTime.substr(0, 2), 10);
 
-      if (forecastHour >= 0 && forecastHour <= now.getHours()) {
+      if (forecastHour >= 0 && forecastHour <= nowHours) {
         if (!processedWeatherData2[fcstTime]) {
           processedWeatherData2[fcstTime] = {
             time: fcstTime,
@@ -172,23 +196,19 @@ const TimeWeather = ({ responseW }) => {
 
     Object.values(processedWeatherData).forEach((item) => {
       if (item.rain !== undefined && item.sky !== undefined) {
-        item.feature = selectFeature(item.rain, item.sky);
+        item.feature = selectFeature(item.rain, item.sky, item.time);
       }
-      console.log(item.rain, item.sky, item.feature);
     });
 
     setWeatherData(Object.values(processedWeatherData));
 
     Object.values(processedWeatherData2).forEach((item) => {
       if (item.rain !== undefined && item.sky !== undefined) {
-        item.feature = selectFeature(item.rain, item.sky);
+        item.feature = selectFeature(item.rain, item.sky, item.time);
       }
-      console.log(item.rain, item.sky, item.feature);
     });
 
     setWeatherData2(Object.values(processedWeatherData2));
-
-    console.log(processedWeatherData2);
   }, []);
   console.log(responseW);
 
@@ -207,28 +227,40 @@ const TimeWeather = ({ responseW }) => {
   //     const newPosition = Math.min(position + 1, maxPosition);
   //     setPosition(newPosition);
   //   };
-
   return (
     <>
       {/* <button onClick={scrollToPrevious}>Previous</button>
       <button onClick={scrollToNext}>Next</button> */}
       <TimeWeatherWrapper
+        hours={nowHours}
         style={{ transform: `translateX(-${position * 320}px)` }}
       >
         {sortedWeatherData.map((item) => (
           <TimeWeatherItem key={`${item.fcstDate}-${item.time}`}>
-            <Temperature>{item.fcstDate}</Temperature>
             <Time>{convertTo12HourFormat(item.time)}</Time>
+            {/* <Feat>{item.feature}!</Feat> */}
+            <FeatIcon
+              src={`/images/icon/${
+                nowHours >= 20 || (nowHours >= 0 && nowHours <= 4)
+                  ? `${item.feature}w.png`
+                  : `${item.feature}.png`
+              }`}
+            />
             <Temperature>{item.temperature}°</Temperature>
-            <Feat>{item.feature}</Feat>
           </TimeWeatherItem>
         ))}
         {sortedWeatherData2.map((item) => (
           <TimeWeatherItem key={`${item.fcstDate}-${item.time}`}>
-            <Temperature>{item.fcstDate}</Temperature>
             <Time>{convertTo12HourFormat(item.time)}</Time>
+            {/* <Feat>{item.feature}</Feat> */}
+            <FeatIcon
+              src={`/images/icon/${
+                nowHours >= 20 || (nowHours >= 0 && nowHours <= 4)
+                  ? `${item.feature}w.png`
+                  : `${item.feature}.png`
+              }`}
+            />
             <Temperature>{item.temperature}°</Temperature>
-            <Feat>{item.feature}</Feat>
           </TimeWeatherItem>
         ))}
       </TimeWeatherWrapper>
@@ -239,9 +271,13 @@ const TimeWeather = ({ responseW }) => {
 export default TimeWeather;
 
 const TimeWeatherWrapper = styled.div`
+  /* background-color: rgba(0, 0, 0, 0.04); */
+  /* background-color: rgba(255, 255, 255, 0.1); */
+  margin: 0 3vw 5vh 3vw;
+  padding: 1vh auto;
   display: flex;
   flex-direction: row;
-  width: 100%; /* Adjust the width to the content */
+  width: auto; /* Adjust the width to the content */
   overflow-x: scroll; /* Enable horizontal scrolling */
   scroll-snap-type: x mandatory; /* Enable snapping */
   scroll-behavior: smooth; /* Add smooth scrolling effect */
@@ -251,19 +287,51 @@ const TimeWeatherWrapper = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+  color: ${({ hours }) => {
+    return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
+      ? "white"
+      : "black";
+  }};
+  background-color: ${({ hours }) => {
+    return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
+      ? "rgba(255, 255, 255, 0.1)"
+      : "rgba(0, 0, 0, 0.04)";
+  }};
 `;
 
 const TimeWeatherItem = styled.div`
-  min-width: 30px; /* Adjust the width as needed */
-  flex-shrink: 0; /* Prevent items from shrinking */
+  min-width: 70px; /* Adjust the width as needed */
+  /* flex-shrink: 0; Prevent items from shrinking */
   scroll-snap-align: start; /* Snap items to the start of the viewport */
-  border: 1px solid #ccc; /* Add a border for visualization */
   padding: 10px;
   margin-right: 10px; /* Add spacing between items */
+  text-align: center;
+  font-size: 14px;
 `;
 
-const Time = styled.div``;
+const Time = styled.div`
+  margin-bottom: 3px;
+`;
 
-const Temperature = styled.div``;
+// const Feat = styled.div`
+//   margin-bottom: 3px;
+// `;
 
-const Feat = styled.div``;
+const Temperature = styled.div`
+  margin-top: 3px;
+`;
+
+const FeatIcon = styled.img`
+  height: 24px;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+`;
+
+// https://icons8.kr/icon/set/weather/material-sharp icon 출처

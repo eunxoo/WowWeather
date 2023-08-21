@@ -158,6 +158,8 @@ const Register = () => {
 export default Register;
 
 const Out = styled.div`
+  display: flex;
+  flex-direction: column;
   height: 100vh;
 `;
 
