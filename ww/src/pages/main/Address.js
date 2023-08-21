@@ -3,10 +3,9 @@ import axios from "axios";
 import styled from "styled-components";
 import { MdMyLocation } from "react-icons/md";
 
-const Address = ({ latitude, longitude }) => {
+const Address = ({ latitude, longitude, hours }) => {
   const [convertedAddress, setConvertedAddress] = useState("");
   const [error, setError] = useState("");
-
   useEffect(() => {
     if (latitude && longitude) {
       console.log("Latitude:", latitude);
@@ -24,6 +23,7 @@ const Address = ({ latitude, longitude }) => {
             region_2depth_name,
             region_3depth_name,
           });
+          console.log(response.data.address);
         })
         .catch((error) => {
           console.error("Error converting coordinates:", error);
@@ -32,7 +32,7 @@ const Address = ({ latitude, longitude }) => {
     }
   }, [latitude, longitude]);
   return (
-    <Container>
+    <Container hours={hours}>
       {/* <MdMyLocation className="myLocation" /> */}
       {convertedAddress && (
         <Box>
@@ -60,16 +60,22 @@ const Container = styled.div`
   .myLocation {
     /* position: absolute; */
   }
+  color: ${({ hours }) => {
+    console.log(hours);
+    return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
+      ? "white"
+      : "black";
+  }};
 `;
 const Box = styled.div`
   display: flex;
   flex-direction: row;
-
+  margin-bottom: 5px;
   align-content: space-around;
   justify-content: center;
 `;
 const AddressDiv = styled.div`
   margin-right: 4px;
-  font-size: 15px;
+  font-size: 17px;
   -webkit-text-size-adjust: none;
 `;
