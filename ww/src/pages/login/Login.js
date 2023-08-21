@@ -39,6 +39,7 @@ const Login = () => {
   return (
     <Wrap>
       <Container>
+        <LogoImg src={"/images/logo/wowstop.gif"} />
         <Box>
           <InputEmail
             type="email"
@@ -77,6 +78,8 @@ const Login = () => {
 export default Login;
 
 const Wrap = styled.div`
+  display: flex;
+  flex-direction: column;
   height: 100vh;
 `;
 
@@ -92,6 +95,21 @@ const Container = styled.div`
   align-items: center;
   justify-items: center;
   height: auto;
+`;
+
+const LogoImg = styled.img`
+  height: 250px;
+  margin-top: -100px;
+  margin-bottom: -10px;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
 `;
 const Box = styled.div`
   display: flex;
