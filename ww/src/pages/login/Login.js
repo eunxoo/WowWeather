@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { PiDotsThreeVertical } from "react-icons/pi";
-import GoogleLogin from "./GoogleLogin";
+import GoogleLogin from "../../components/login/GoogleLogin";
 import { firebaseAuth, signInWithEmailAndPassword } from "../../fbase";
 
 const Login = () => {

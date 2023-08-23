@@ -5,7 +5,7 @@ import Style from "./pages/myStyle/Style";
 import Login from "./pages/login/Login";
 import Register from "./pages/login/Register";
 import { Route, Routes } from "react-router-dom";
-import Menubar from "./components/Menubar";
+import Menubar from "./components/bar/Menubar";
 
 const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {
   console.log(isLoggedIn);

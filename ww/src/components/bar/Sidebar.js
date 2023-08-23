@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { MdClose, MdNavigateNext } from "react-icons/md";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
-import { firebaseAuth, signOut } from "../fbase";
+import { firebaseAuth, signOut } from "../../fbase";
 
 const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj }) => {
   const location = useLocation();

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
-import TimeWeather from "./TimeWeather";
-import CurrentWeather from "./CurrentWeather";
+import TimeWeather from "../../components/main/TimeWeather";
+import CurrentWeather from "../../components/main//CurrentWeather";
 import Style from "../myStyle/Style";
 
 const Weather = () => {
