@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const TimeWeather = ({ responseW }) => {
   const [weatherData, setWeatherData] = useState([]);
@@ -210,31 +213,19 @@ const TimeWeather = ({ responseW }) => {
 
     setWeatherData2(Object.values(processedWeatherData2));
   }, []);
-  console.log(responseW);
 
-  const [position, setPosition] = useState(0); // Current position for sliding
+  const settings = {
+    dots: false,
+    infinite: false,
+    arrows: false,
+    // autoSlidesToShow: true,
+    variableWidth: true,
+    swipeToSlide: true,
+  };
 
-  // Function to scroll to the previous position
-  //   const scrollToPrevious = () => {
-  //     const newPosition = Math.max(position - 1, 0);
-  //     setPosition(newPosition);
-  //   };
-
-  //   // Function to scroll to the next position
-  //   const scrollToNext = () => {
-  //     const maxPosition =
-  //       sortedWeatherData.length + sortedWeatherData2.length - 1;
-  //     const newPosition = Math.min(position + 1, maxPosition);
-  //     setPosition(newPosition);
-  //   };
   return (
     <>
-      {/* <button onClick={scrollToPrevious}>Previous</button>
-      <button onClick={scrollToNext}>Next</button> */}
-      <TimeWeatherWrapper
-        hours={nowHours}
-        style={{ transform: `translateX(-${position * 320}px)` }}
-      >
+      <TimeWeatherWrapper {...settings}>
         {sortedWeatherData.map((item) => (
           <TimeWeatherItem key={`${item.fcstDate}-${item.time}`}>
             <Time>{convertTo12HourFormat(item.time)}</Time>
@@ -270,23 +261,12 @@ const TimeWeather = ({ responseW }) => {
 
 export default TimeWeather;
 
-const TimeWeatherWrapper = styled.div`
-  /* background-color: rgba(0, 0, 0, 0.04); */
-  /* background-color: rgba(255, 255, 255, 0.1); */
+const TimeWeatherWrapper = styled(Slider)`
   margin: 0 3vw 5vh 3vw;
   padding: 1vh auto;
   display: flex;
   flex-direction: row;
-  width: auto; /* Adjust the width to the content */
-  overflow-x: scroll; /* Enable horizontal scrolling */
-  scroll-snap-type: x mandatory; /* Enable snapping */
-  scroll-behavior: smooth; /* Add smooth scrolling effect */
-  /* Hide the scrollbar */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+
   color: ${({ hours }) => {
     return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
       ? "white"
@@ -300,13 +280,15 @@ const TimeWeatherWrapper = styled.div`
 `;
 
 const TimeWeatherItem = styled.div`
-  min-width: 70px; /* Adjust the width as needed */
-  /* flex-shrink: 0; Prevent items from shrinking */
-  scroll-snap-align: start; /* Snap items to the start of the viewport */
+  min-width: 55px;
   padding: 10px;
-  margin-right: 10px; /* Add spacing between items */
+  margin: auto 5px;
   text-align: center;
   font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
 `;
 
 const Time = styled.div`
@@ -323,15 +305,6 @@ const Temperature = styled.div`
 
 const FeatIcon = styled.img`
   height: 24px;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
+  position: relative;
+  left: 34%;
 `;
-
-// https://icons8.kr/icon/set/weather/material-sharp icon 출처
