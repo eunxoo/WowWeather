@@ -19,7 +19,7 @@ const Weather = () => {
 
   const currentDateTime = new Date();
   const hours = currentDateTime.getHours();
-  // const [time, setTime] = useState("");
+
   const [rain, setRain] = useState("");
 
   const [latitude, setLatitude] = useState("");
