@@ -76,84 +76,92 @@ const Register = () => {
   };
 
   return (
-    <Container>
-      <Wrap>
-        <Header>
-          <FaArrowLeft className="arrow" onClick={() => navigate("/")} />
-        </Header>
-        <Box>
-          <SemiBox>
-            <AText>이메일</AText>
-            {errorMsg1 === " " ? (
-              <AInput
-                name="email"
-                value={registerEmail}
-                placeholder="이메일을 입력해주세요"
-                onChange={onChange}
-              ></AInput>
-            ) : (
-              <ErrorInput
-                name="email"
-                value={registerEmail}
-                placeholder="이메일을 입력해주세요"
-                onChange={onChange}
-              ></ErrorInput>
-            )}
-            <ErrMsg1>{errorMsg1}</ErrMsg1>
-          </SemiBox>
-          <SemiBox>
-            <AText>비밀번호 (6자리 이상 입력해주세요.) </AText>
-            {errorMsg2 === " " ? (
-              <AInput
-                name="password"
-                value={registerPassword}
-                placeholder="비밀번호를 입력해주세요"
-                onChange={onChange}
-              ></AInput>
-            ) : (
-              <ErrorInput
-                name="password"
-                value={registerPassword}
-                placeholder="비밀번호를 입력해주세요"
-                onChange={onChange}
-              ></ErrorInput>
-            )}
-            <ErrMsg2>{errorMsg2}</ErrMsg2>
-          </SemiBox>
-          <SemiBox>
-            <AText>닉네임</AText>
-            {isName ? (
-              <AInput
-                name="displayName"
-                value={displayName}
-                placeholder="닉네임을 입력해주세요"
-                onChange={onChange}
-              ></AInput>
-            ) : (
-              <ErrorInput
-                name="displayName"
-                value={displayName}
-                placeholder="닉네임을 입력해주세요"
-                onChange={onChange}
-              ></ErrorInput>
-            )}
-          </SemiBox>
-          <BtnBox>
-            {!registerEmail || !registerPassword || !displayName ? (
-              <InvalidBtn>회원가입</InvalidBtn>
-            ) : (
-              <ValidBtn onClick={signup}>회원가입</ValidBtn>
-            )}
+    <Out>
+      <Container>
+        <Wrap>
+          <Header>
+            <FaArrowLeft className="arrow" onClick={() => navigate("/")} />
+          </Header>
+          <Box>
+            <SemiBox>
+              <AText>이메일</AText>
+              {errorMsg1 === " " ? (
+                <AInput
+                  name="email"
+                  value={registerEmail}
+                  placeholder="이메일을 입력해주세요"
+                  onChange={onChange}
+                ></AInput>
+              ) : (
+                <ErrorInput
+                  name="email"
+                  value={registerEmail}
+                  placeholder="이메일을 입력해주세요"
+                  onChange={onChange}
+                ></ErrorInput>
+              )}
+              <ErrMsg1>{errorMsg1}</ErrMsg1>
+            </SemiBox>
+            <SemiBox>
+              <AText>비밀번호 (6자리 이상 입력해주세요.) </AText>
+              {errorMsg2 === " " ? (
+                <AInput
+                  name="password"
+                  value={registerPassword}
+                  placeholder="비밀번호를 입력해주세요"
+                  onChange={onChange}
+                ></AInput>
+              ) : (
+                <ErrorInput
+                  name="password"
+                  value={registerPassword}
+                  placeholder="비밀번호를 입력해주세요"
+                  onChange={onChange}
+                ></ErrorInput>
+              )}
+              <ErrMsg2>{errorMsg2}</ErrMsg2>
+            </SemiBox>
+            <SemiBox>
+              <AText>닉네임</AText>
+              {isName ? (
+                <AInput
+                  name="displayName"
+                  value={displayName}
+                  placeholder="닉네임을 입력해주세요"
+                  onChange={onChange}
+                ></AInput>
+              ) : (
+                <ErrorInput
+                  name="displayName"
+                  value={displayName}
+                  placeholder="닉네임을 입력해주세요"
+                  onChange={onChange}
+                ></ErrorInput>
+              )}
+            </SemiBox>
+            <BtnBox>
+              {!registerEmail || !registerPassword || !displayName ? (
+                <InvalidBtn>회원가입</InvalidBtn>
+              ) : (
+                <ValidBtn onClick={signup}>회원가입</ValidBtn>
+              )}
 
-            <ErrMsg3>{errorMsg3}</ErrMsg3>
-          </BtnBox>
-        </Box>
-      </Wrap>
-    </Container>
+              <ErrMsg3>{errorMsg3}</ErrMsg3>
+            </BtnBox>
+          </Box>
+        </Wrap>
+      </Container>
+    </Out>
   );
 };
 
 export default Register;
+
+const Out = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+`;
 
 const Container = styled.div`
   position: relative;
@@ -166,7 +174,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-items: center;
-
+  height: auto;
   .arrow {
     position: absolute;
   }

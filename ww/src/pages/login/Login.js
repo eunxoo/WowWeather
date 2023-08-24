@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { PiDotsThreeVertical } from "react-icons/pi";
-import GoogleLogin from "./GoogleLogin";
+import GoogleLogin from "../../components/login/GoogleLogin";
 import { firebaseAuth, signInWithEmailAndPassword } from "../../fbase";
 
 const Login = () => {
@@ -30,10 +30,6 @@ const Login = () => {
     }
   };
 
-  // const logout = async () => {
-  //   await signOut(firebaseAuth);
-  // };
-
   const onCheckEnter = (e) => {
     if (e.key === "Enter") {
       signIn();
@@ -41,42 +37,51 @@ const Login = () => {
   };
 
   return (
-    <Container>
-      <Box>
-        <InputEmail
-          type="email"
-          value={loginEmail}
-          onChange={(e) => {
-            setLoginEmail(e.target.value);
-          }}
-          placeholder="이메일"
-        />
-        <InputPw
-          type="password"
-          value={loginPassword}
-          onChange={(e) => {
-            setLoginPassword(e.target.value);
-          }}
-          placeholder="비밀번호"
-          onKeyPress={onCheckEnter}
-        />
-        <LoginBtn onClick={signIn}>로그인</LoginBtn>
-      </Box>
-      <Boxx>
-        <SearchPassWord>비밀번호 찾기</SearchPassWord>
-        <BarContainer>
-          <PiDotsThreeVertical className="bar" />
-        </BarContainer>
-        <RegisterDiv onClick={() => navigate("/register")}>
-          회원가입
-        </RegisterDiv>
-      </Boxx>
-      <GoogleLogin />
-    </Container>
+    <Wrap>
+      <Container>
+        <LogoImg src={"/images/logo/wowstop.gif"} />
+        <Box>
+          <InputEmail
+            type="email"
+            value={loginEmail}
+            onChange={(e) => {
+              setLoginEmail(e.target.value);
+            }}
+            placeholder="이메일"
+          />
+          <InputPw
+            type="password"
+            value={loginPassword}
+            onChange={(e) => {
+              setLoginPassword(e.target.value);
+            }}
+            placeholder="비밀번호"
+            onKeyPress={onCheckEnter}
+          />
+          <LoginBtn onClick={signIn}>로그인</LoginBtn>
+        </Box>
+        <Boxx>
+          <SearchPassWord>비밀번호 찾기</SearchPassWord>
+          <BarContainer>
+            <PiDotsThreeVertical className="bar" />
+          </BarContainer>
+          <RegisterDiv onClick={() => navigate("/register")}>
+            회원가입
+          </RegisterDiv>
+        </Boxx>
+        <GoogleLogin />
+      </Container>
+    </Wrap>
   );
 };
 
 export default Login;
+
+const Wrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+`;
 
 const Container = styled.div`
   position: relative;
@@ -89,6 +94,22 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-items: center;
+  height: auto;
+`;
+
+const LogoImg = styled.img`
+  height: 250px;
+  margin-top: -100px;
+  margin-bottom: -10px;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
 `;
 const Box = styled.div`
   display: flex;

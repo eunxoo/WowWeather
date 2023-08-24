@@ -44,16 +44,38 @@ const App = () => {
           userObj={userObj}
         />
       ) : (
-        "initializing..."
+        <LogoImg src={"/images/logo/wowlogoreverse.gif"} />
       )}
-      <Footer>&copy; {new Date().getFullYear()} 앗!</Footer>
+      {/* <Footer>&copy; {new Date().getFullYear()} 앗!</Footer> */}
     </>
   );
 };
 export default App;
 
+const LogoImg = styled.img`
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  top: calc(var(--vh, 1vh) * 50);
+  transform: translateY(-50%);
+  width: 100%;
+  height: 250px;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+`;
+
 const Footer = styled.div`
-  position: absolute;
-  bottom: 0;
+  margin-top: 3vh;
+  /* position: relative; */
+  /* transform: translateY(-100%); */
   font-size: 0.5vh;
 `;

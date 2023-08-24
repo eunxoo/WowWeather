@@ -7,6 +7,7 @@ import {
   updateProfile,
   sendEmailVerification,
 } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -21,10 +22,12 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAuth = getAuth(firebaseApp);
+const fireStoreJob = getFirestore(firebaseApp);
 
 export {
   firebaseApp,
   firebaseAuth,
+  fireStoreJob,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
