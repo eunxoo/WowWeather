@@ -64,8 +64,8 @@ const Container = styled.div`
   .navNone {
     height: 30px;
     width: 100%;
-    /* display: none;
-    visibility: none; */
+    display: none;
+    visibility: none;
     opacity: 1;
   }
 `;

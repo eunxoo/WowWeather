@@ -2,7 +2,12 @@ import React, { useEffect, useRef } from "react";
 import { MdClose, MdNavigateNext } from "react-icons/md";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
+<<<<<<< Updated upstream:ww/src/components/Sidebar.js
 import { firebaseAuth, signOut } from "../fbase";
+=======
+import { firebaseAuth, signOut } from "../../fbase";
+import Menubar from "./Menubar";
+>>>>>>> Stashed changes:ww/src/components/bar/Sidebar.js
 
 const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj }) => {
   const location = useLocation();
@@ -47,37 +52,57 @@ const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj }) => {
   }
 
   return (
-    <Container className={isOpen ? "open" : ""} ref={outside} hours={nowHours}>
-      <Box>{dname + " 님, 안녕하세요!"}</Box>
-      <CloseDiv hours={nowHours}>
-        <MdClose className="close" onClick={toggleSide} />
-      </CloseDiv>
-      <ul className="ul">
-        <Menu $isActive={location.pathname === "/"} hours={nowHours}>
-          <MdNavigateNext className="in" />
-          <Link className="link" to="/" onClick={toggleSide}>
-            홈
-          </Link>
-        </Menu>
-        <Menu $isActive={location.pathname === "/checklist"} hours={nowHours}>
-          <MdNavigateNext className="in" />
-          <Link className="link" to="/checklist" onClick={toggleSide}>
-            체크리스트
-          </Link>
-        </Menu>
-        <Menu $isActive={location.pathname === "/mystyle"} hours={nowHours}>
-          <MdNavigateNext className="in" />
-          <Link className="link" to="/mystyle" onClick={toggleSide}>
-            나의 스타일
-          </Link>
-        </Menu>
-      </ul>
-      <SignOut onClick={logout}>로그아웃</SignOut>
-    </Container>
+    <>
+      <Div hours={nowHours}></Div>
+      <Container
+        className={isOpen ? "open" : ""}
+        ref={outside}
+        hours={nowHours}
+      >
+        <Box>{dname + " 님, 안녕하세요!"}</Box>
+        <CloseDiv hours={nowHours}>
+          <MdClose className="close" onClick={toggleSide} />
+        </CloseDiv>
+        <ul className="ul">
+          <Menu $isActive={location.pathname === "/"} hours={nowHours}>
+            <MdNavigateNext className="in" />
+            <Link className="link" to="/" onClick={toggleSide}>
+              홈
+            </Link>
+          </Menu>
+          <Menu $isActive={location.pathname === "/checklist"} hours={nowHours}>
+            <MdNavigateNext className="in" />
+            <Link className="link" to="/checklist" onClick={toggleSide}>
+              체크리스트
+            </Link>
+          </Menu>
+          <Menu $isActive={location.pathname === "/mystyle"} hours={nowHours}>
+            <MdNavigateNext className="in" />
+            <Link className="link" to="/mystyle" onClick={toggleSide}>
+              나의 스타일
+            </Link>
+          </Menu>
+        </ul>
+        <SignOut onClick={logout}>로그아웃</SignOut>
+      </Container>
+    </>
   );
 };
 
 export default Sidebar;
+
+const Div = styled.div`
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  height: 6.2vh;
+  background-color: ${({ hours }) => {
+    return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
+      ? "black"
+      : "white";
+  }};
+  z-index: -5;
+`;
 
 const Container = styled.div`
   z-index: 5;
