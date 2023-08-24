@@ -2,12 +2,8 @@ import React, { useEffect, useRef } from "react";
 import { MdClose, MdNavigateNext } from "react-icons/md";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
-<<<<<<< Updated upstream:ww/src/components/Sidebar.js
-import { firebaseAuth, signOut } from "../fbase";
-=======
 import { firebaseAuth, signOut } from "../../fbase";
 import Menubar from "./Menubar";
->>>>>>> Stashed changes:ww/src/components/bar/Sidebar.js
 
 const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj }) => {
   const location = useLocation();
