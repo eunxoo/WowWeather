@@ -140,17 +140,13 @@ const CheckList = ({ userObj }) => {
           </Box>
         </Div>
         <List>
-          <ListItem>
-            {list.map((data) => (
-              <>
-                <input type="checkbox" />
-                <Item key={data.id} id={data.id}>
-                  {data.check}
-                </Item>
-                <button onClick={() => onDeleteClick(data.id)}>x</button>
-              </>
-            ))}
-          </ListItem>
+          {list.map((data) => (
+            <ListItem key={data.id}>
+              <input type="checkbox" />
+              <Item id={data.id}>{data.check}</Item>
+              <button onClick={() => onDeleteClick(data.id)}>x</button>
+            </ListItem>
+          ))}
         </List>
       </Wrap>
     </Container>
