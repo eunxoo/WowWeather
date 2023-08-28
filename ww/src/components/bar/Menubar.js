@@ -120,7 +120,6 @@ const Navbar = styled.div`
   width: 100%;
   position: fixed;
   top: 0;
-  padding-bottom: 3vh; // 수정해야할 수도 있음.. 낮에 확인해보기
   transition-timing-function: ease-in;
   transition: 0.3s;
 `;
