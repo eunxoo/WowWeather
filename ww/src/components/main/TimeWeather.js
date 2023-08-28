@@ -116,7 +116,8 @@ const TimeWeather = ({ responseW }) => {
   useEffect(() => {
     const processedWeatherData = {};
     const processedWeatherData2 = {};
-
+    console.log(responseW);
+    console.log("nowWeatherRes:", responseW.nowWeatherRes);
     console.log("todayWeatherRes:", responseW.todayWeatherRes);
     console.log("tomorrowWeatherRes:", responseW.tomorrowWeatherRes);
     // Process nowWeatherRes and store data in processedWeatherData
@@ -127,7 +128,9 @@ const TimeWeather = ({ responseW }) => {
       const fcstDate = item.fcstDate;
 
       const forecastHour = parseInt(fcstTime.substr(0, 2), 10);
-      if (forecastHour > nowHours && forecastHour <= nowHours + 5) {
+      console.log(forecastHour);
+      console.log(forecastHour);
+      if (forecastHour >= nowHours && forecastHour <= nowHours + 4) {
         if (!processedWeatherData[fcstTime]) {
           processedWeatherData[fcstTime] = {
             time: fcstTime,
@@ -153,7 +156,7 @@ const TimeWeather = ({ responseW }) => {
 
       const forecastHour = parseInt(fcstTime.substr(0, 2), 10);
 
-      if (forecastHour >= nowHours + 6 && forecastHour <= nowHours + 24) {
+      if (forecastHour >= nowHours + 5 && forecastHour <= nowHours + 24) {
         if (!processedWeatherData[fcstTime]) {
           processedWeatherData[fcstTime] = {
             time: fcstTime,
@@ -225,7 +228,7 @@ const TimeWeather = ({ responseW }) => {
 
   return (
     <>
-      <TimeWeatherWrapper {...settings}>
+      <TimeWeatherWrapper {...settings} hours={nowHours}>
         {sortedWeatherData.map((item) => (
           <TimeWeatherItem key={`${item.fcstDate}-${item.time}`}>
             <Time>{convertTo12HourFormat(item.time)}</Time>

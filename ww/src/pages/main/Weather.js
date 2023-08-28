@@ -13,8 +13,9 @@ const Weather = () => {
     nowWeatherRes: [],
     todayWeatherRes: [],
     tomorrowWeatherRes: [],
+    nowDustRes: [],
+    yesWeatherRes: [],
   });
-
   const [isLoading, setIsLoading] = useState(true);
 
   const currentDateTime = new Date();
