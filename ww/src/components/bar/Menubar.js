@@ -9,7 +9,7 @@ const Menubar = ({ userObj }) => {
   const nowHours = new Date().getHours();
 
   const controlNavbar = () => {
-    if (window.scrollY > 50) {
+    if (window.scrollY > 30) {
       setIsShow(true);
     } else {
       setIsShow(false);

@@ -153,6 +153,8 @@ const CurrentWeather = ({ responseW, latitude, longitude }) => {
 
     selectFeature(rain, sky);
   }, [rain, sky]);
+
+  console.log(responseW.nowWeatherRes);
   return (
     <>
       <NowWrap hours={nowHours}>
