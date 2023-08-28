@@ -7,7 +7,8 @@ import CurrentWeather from "../../components/main//CurrentWeather";
 import Style from "../myStyle/Style";
 
 const Weather = () => {
-  const url = "http://localhost:8000";
+  const url =
+    "https://port-0-wow-node-express-54ouz2lllulbggn.sel3.cloudtype.app";
 
   const [responseW, setResponseW] = useState({
     nowWeatherRes: [],

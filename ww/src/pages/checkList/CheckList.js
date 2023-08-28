@@ -21,7 +21,8 @@ import {
 } from "firebase/firestore";
 
 const CheckList = ({ userObj }) => {
-  const url = "http://localhost:8000";
+  const url =
+    "https://port-0-wow-node-express-54ouz2lllulbggn.sel3.cloudtype.app";
   const currentDateTime = new Date();
   const hours = currentDateTime.getHours();
   const [rain, setRain] = useState("");
