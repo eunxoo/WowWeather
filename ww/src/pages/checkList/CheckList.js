@@ -578,9 +578,13 @@ const Outing = styled.div`
   margin-bottom: 1vh;
 `;
 
-const InputOuting1 = styled.input``;
+const InputOuting1 = styled.input`
+  border: none;
+`;
 
-const InputOuting2 = styled.input``;
+const InputOuting2 = styled.input`
+  border: none;
+`;
 
 const SubButton = styled.button`
   height: 3vh;
@@ -625,6 +629,7 @@ const InputThing = styled.input`
   width: 80vw;
   height: 3vh;
   border: none;
+  border-radius: 10px;
   padding: 3vh 1vw;
   font-size: 3vh;
   opacity: 0.8;
@@ -656,6 +661,7 @@ const List = styled.div`
       ? "rgba(255, 255, 255, 0.1)"
       : "rgba(0, 0, 0, 0.04)";
   }};
+  border-radius: 10px;
   padding: 1vh 0;
 `;
 
@@ -683,14 +689,12 @@ const Item = styled.div`
   width: 70vw;
   text-align: left;
   margin-left: 10px;
-  /* padding: 2vh 0; */
 `;
 
 const StyledLabel = styled.label`
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* padding: 1vh 0; */
 `;
 
 const StyledInput = styled.input`
@@ -713,20 +717,3 @@ const StyledInput = styled.input`
     background-color: #31b5ff;
   }
 `;
-
-// const CheckBox = styled.input`
-// appearance: none;
-// width: 1.5rem;
-// height: 1.5rem;
-// border: 1.5px solid gainsboro;
-// border-radius: 0.35rem;
-
-// &:checked {
-//   border-color: transparent;
-//   background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
-//   background-size: 100% 100%;
-//   background-position: 50%;
-//   background-repeat: no-repeat;
-//   background-color: limegreen;
-//   }
-// `;
