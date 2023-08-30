@@ -70,36 +70,24 @@ const CheckList = ({ userObj }) => {
               todayWeatherRes,
               tomorrowWeatherRes,
             ]) => {
-              const nowPTY = nowWeatherRes.data.find(
+              const nowPTY = nowWeatherRes.data.filter(
                 (item) => item.category === "PTY"
               );
               if (nowPTY) {
-                setRain(nowPTY.fcstValue);
+                setRain(nowPTY[0].fcstValue);
               }
-              console.log(todayWeatherRes);
-              console.log(tomorrowWeatherRes);
-              console.log(nowWeatherRes);
-              console.log(nowDustRes);
+
+              console.log("tomorrowWeatherRes: ", tomorrowWeatherRes);
+              console.log("nowWeatherRes: ", nowWeatherRes);
+              console.log("nowDustRes: ", nowDustRes);
+              console.log("todayWeatherRes: ", todayWeatherRes);
 
               const pm25Grade1h = nowDustRes.data.pm25Grade1h;
               const pm10Grade1h = nowDustRes.data.pm10Grade1h;
               setDust(pm10Grade1h || "-"); // 만약 null이면 "-"로 설정
               setSDust(pm25Grade1h || "-");
-              // if (dust >= 3 || sdust >= 3) {
-              //   setRecommend((prevRecommend) =>
-              //     !prevRecommend.includes("마스크")
-              //       ? [...prevRecommend, "마스크"]
-              //       : prevRecommend
-              //   );
-              // }
+
               console.log(dust);
-              // if (outingTimes.outing1Time && outingTimes.outing2Time) {
-              //   const outingStartTime = parseInt(
-              //     formatTimeToFixedHours(outingTimes.outing1Time)
-              //   );
-              //   const outingEndTime = parseInt(
-              //     formatTimeToFixedHours(outingTimes.outing2Time)
-              //   );
 
               const todayPTY = todayWeatherRes.data.filter(
                 (item) => item.category === "PTY"

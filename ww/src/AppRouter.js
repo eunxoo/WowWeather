@@ -10,7 +10,6 @@ import Menubar from "./components/bar/Menubar";
 const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {
   console.log(isLoggedIn);
   console.log(userObj);
-
   return (
     <Routes>
       {isLoggedIn ? (

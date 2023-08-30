@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
-
+import moment from "moment-timezone";
 import TimeWeather from "../../components/main/TimeWeather";
 import CurrentWeather from "../../components/main//CurrentWeather";
 import Style from "../myStyle/Style";
 
 const Weather = () => {
-  const url = "http://localhost:8000";
+  moment.tz.setDefault("Asia/Seoul");
+  console.log(moment().hour());
+  const nowHours = moment().hour();
+  const url =
+    "https://port-0-wow-node-express-54ouz2lllulbggn.sel3.cloudtype.app";
 
   const [responseW, setResponseW] = useState({
     nowWeatherRes: [],
@@ -18,8 +22,8 @@ const Weather = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
 
-  const currentDateTime = new Date();
-  const hours = currentDateTime.getHours();
+  // const currentDateTime = new Date();
+  // const hours = currentDateTime.getHours();
 
   const [rain, setRain] = useState("");
 
@@ -90,14 +94,14 @@ const Weather = () => {
           });
       });
     }
-  }, [rain, hours]);
+  }, [rain, nowHours]);
 
   return (
     <Container>
       {isLoading ? (
         <LogoImg src={"/images/logo/wowlogoreverse.gif"} />
       ) : (
-        <WrapWeather rain={rain} hours={hours}>
+        <WrapWeather rain={rain} hours={nowHours}>
           <CurrentWeather
             responseW={responseW}
             latitude={latitude}

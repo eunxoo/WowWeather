@@ -3,10 +3,13 @@ import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Sidebar from "./Sidebar";
+import moment from "moment-timezone";
 
 const Menubar = ({ userObj }) => {
+  moment.tz.setDefault("Asia/Seoul");
+  console.log(moment().hour());
+  const nowHours = moment().hour();
   const [isShow, setIsShow] = useState(false);
-  const nowHours = new Date().getHours();
 
   const controlNavbar = () => {
     if (window.scrollY > 30) {
@@ -52,6 +55,7 @@ const Menubar = ({ userObj }) => {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         userObj={userObj}
+        hours={nowHours}
       />
     </Container>
   );
@@ -64,8 +68,8 @@ const Container = styled.div`
   .navNone {
     height: 30px;
     width: 100%;
-    /* display: none;
-    visibility: none; */
+    display: none;
+    visibility: none;
     opacity: 1;
   }
 `;
@@ -120,7 +124,6 @@ const Navbar = styled.div`
   width: 100%;
   position: fixed;
   top: 0;
-  padding-bottom: 3vh; // 수정해야할 수도 있음.. 낮에 확인해보기
   transition-timing-function: ease-in;
   transition: 0.3s;
 `;
