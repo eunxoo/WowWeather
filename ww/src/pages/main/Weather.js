@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
-
+import moment from "moment-timezone";
 import TimeWeather from "../../components/main/TimeWeather";
 import CurrentWeather from "../../components/main//CurrentWeather";
 import Style from "../myStyle/Style";
 
-const Weather = ({ nowHours }) => {
+const Weather = () => {
+  moment.tz.setDefault("Asia/Seoul");
+  console.log(moment().hour());
+  const nowHours = moment().hour();
   const url =
     "https://port-0-wow-node-express-54ouz2lllulbggn.sel3.cloudtype.app";
 
@@ -98,16 +101,15 @@ const Weather = ({ nowHours }) => {
       {isLoading ? (
         <LogoImg src={"/images/logo/wowlogoreverse.gif"} />
       ) : (
-        <WrapWeather rain={rain} nowHours={nowHours}>
+        <WrapWeather rain={rain} hours={nowHours}>
           <CurrentWeather
             responseW={responseW}
             latitude={latitude}
             longitude={longitude}
-            nowHours={nowHours}
           />
 
-          <TimeWeather responseW={responseW} nowHours={nowHours} />
-          <Style nowHours={nowHours} />
+          <TimeWeather responseW={responseW} />
+          <Style />
         </WrapWeather>
       )}
     </Container>
@@ -124,16 +126,13 @@ const Container = styled.div`
 `;
 
 const WrapWeather = styled.div`
-  background: ${({ rain, nowHours }) => {
-    console.log(`rain: ${rain} hours: ${nowHours}`);
-    if (rain == 0 && nowHours >= 4 && nowHours <= 19) {
+  background: ${({ rain, hours }) => {
+    console.log(`rain: ${rain} hours: ${hours}`);
+    if (rain == 0 && hours >= 4 && hours <= 19) {
       return "linear-gradient(white 3.5%, #b4dfff)";
-    } else if (rain !== 0 && nowHours >= 4 && nowHours <= 19) {
+    } else if (rain !== 0 && hours >= 4 && hours <= 19) {
       return "linear-gradient(white 3.5%, #C6C6C6)";
-    } else if (
-      (nowHours >= 20 && nowHours <= 23) ||
-      (nowHours >= 0 && nowHours <= 4)
-    ) {
+    } else if ((hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)) {
       return "linear-gradient(black 3.5%, #0B0085)";
     }
   }};

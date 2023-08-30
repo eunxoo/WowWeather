@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { firebaseAuth, signOut } from "../../fbase";
 
-const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj, nowHours }) => {
+const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj, hours }) => {
   const location = useLocation();
 
   useEffect(() => {
@@ -47,30 +47,26 @@ const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj, nowHours }) => {
 
   return (
     <>
-      <Div hours={nowHours}></Div>
-      <Container
-        className={isOpen ? "open" : ""}
-        ref={outside}
-        hours={nowHours}
-      >
+      <Div hours={hours}></Div>
+      <Container className={isOpen ? "open" : ""} ref={outside} hours={hours}>
         <Box>{dname + " 님, 안녕하세요!"}</Box>
-        <CloseDiv hours={nowHours}>
+        <CloseDiv hours={hours}>
           <MdClose className="close" onClick={toggleSide} />
         </CloseDiv>
         <ul className="ul">
-          <Menu $isActive={location.pathname === "/"} hours={nowHours}>
+          <Menu $isActive={location.pathname === "/"} hours={hours}>
             <MdNavigateNext className="in" />
             <Link className="link" to="/" onClick={toggleSide}>
               홈
             </Link>
           </Menu>
-          <Menu $isActive={location.pathname === "/checklist"} hours={nowHours}>
+          <Menu $isActive={location.pathname === "/checklist"} hours={hours}>
             <MdNavigateNext className="in" />
             <Link className="link" to="/checklist" onClick={toggleSide}>
               체크리스트
             </Link>
           </Menu>
-          <Menu $isActive={location.pathname === "/mystyle"} hours={nowHours}>
+          <Menu $isActive={location.pathname === "/mystyle"} hours={hours}>
             <MdNavigateNext className="in" />
             <Link className="link" to="/mystyle" onClick={toggleSide}>
               나의 스타일

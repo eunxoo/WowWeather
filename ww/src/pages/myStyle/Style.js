@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import moment from "moment-timezone";
 
-const Style = ({ nowHours }) => {
+const Style = () => {
+  moment.tz.setDefault("Asia/Seoul");
+  console.log(moment().hour());
+  const nowHours = moment().hour();
   const [selectedStyle, setSelectedStyle] = useState(""); // 선택된 스타일 상태
 
   const handleStyleButtonClick = (style) => {
@@ -10,7 +14,7 @@ const Style = ({ nowHours }) => {
   // const nowHours = new Date().getHours();
   console.log(nowHours);
   return (
-    <Container nowHours={nowHours}>
+    <Container hours={nowHours}>
       <ButtonDiv>
         <FormalB
           selected={selectedStyle === "formal"}
@@ -54,17 +58,15 @@ const Style = ({ nowHours }) => {
 export default Style;
 
 const Container = styled.div`
-  background-color: ${({ nowHours }) => {
-    return (nowHours >= 20 && nowHours <= 23) ||
-      (nowHours >= 0 && nowHours <= 4)
+  background-color: ${({ hours }) => {
+    return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
       ? "rgba(255, 255, 255, 0.1)"
       : "rgba(0, 0, 0, 0.04)";
   }};
   margin: 0 3vw 5vh 3vw;
   padding: 2vh 2vw;
-  color: ${({ nowHours }) => {
-    return (nowHours >= 20 && nowHours <= 23) ||
-      (nowHours >= 0 && nowHours <= 4)
+  color: ${({ hours }) => {
+    return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
       ? "white"
       : "black";
   }};

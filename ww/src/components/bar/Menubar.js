@@ -3,8 +3,12 @@ import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Sidebar from "./Sidebar";
+import moment from "moment-timezone";
 
-const Menubar = ({ userObj, nowHours }) => {
+const Menubar = ({ userObj }) => {
+  moment.tz.setDefault("Asia/Seoul");
+  console.log(moment().hour());
+  const nowHours = moment().hour();
   const [isShow, setIsShow] = useState(false);
 
   const controlNavbar = () => {
@@ -51,7 +55,7 @@ const Menubar = ({ userObj, nowHours }) => {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         userObj={userObj}
-        nowHours={nowHours}
+        hours={nowHours}
       />
     </Container>
   );

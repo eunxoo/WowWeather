@@ -20,8 +20,10 @@ import {
   where,
 } from "firebase/firestore";
 
-const CheckList = ({ userObj, nowHours }) => {
+const CheckList = ({ userObj }) => {
   moment.tz.setDefault("Asia/Seoul");
+  console.log(moment().hour());
+  const nowHours = moment().hour();
   const url =
     "https://port-0-wow-node-express-54ouz2lllulbggn.sel3.cloudtype.app";
   // const currentDateTime = new Date();
@@ -89,16 +91,23 @@ const CheckList = ({ userObj, nowHours }) => {
       if (
         outingTimes.outing1Time &&
         outingTimes.outing2Time &&
-        responseW.nowPTY &&
-        responseW.nowPTY.fcstTime >= outingStartTime &&
-        responseW.nowPTY.fcstTime <= outingEndTime &&
-        responseW.nowPTY.fcstValue !== "0"
+        responseW.nowPTY
       ) {
-        setRecommend((prevRecommend) =>
-          !prevRecommend.includes("우산")
-            ? [...prevRecommend, "우산"]
-            : prevRecommend
-        );
+        responseW.nowPTY.forEach((item) => {
+          console.log("fcstTime:", item.fcstTime);
+          console.log("fcstValue:", item.fcstValue);
+          if (
+            item.fcstTime >= outingStartTime &&
+            item.fcstTime <= outingEndTime &&
+            item.fcstValue !== "0"
+          ) {
+            setRecommend((prevRecommend) =>
+              !prevRecommend.includes("우산")
+                ? [...prevRecommend, "우산"]
+                : prevRecommend
+            );
+          }
+        });
       }
 
       if (
@@ -214,36 +223,24 @@ const CheckList = ({ userObj, nowHours }) => {
               todayWeatherRes,
               tomorrowWeatherRes,
             ]) => {
-              const nowPTY = nowWeatherRes.data.find(
+              const nowPTY = nowWeatherRes.data.filter(
                 (item) => item.category === "PTY"
               );
               if (nowPTY) {
-                setRain(nowPTY.fcstValue);
+                setRain(nowPTY[0].fcstValue);
               }
-              console.log(tomorrowWeatherRes);
-              console.log(nowWeatherRes);
-              console.log(nowDustRes);
-              console.log(todayWeatherRes);
+
+              console.log("tomorrowWeatherRes: ", tomorrowWeatherRes);
+              console.log("nowWeatherRes: ", nowWeatherRes);
+              console.log("nowDustRes: ", nowDustRes);
+              console.log("todayWeatherRes: ", todayWeatherRes);
 
               const pm25Grade1h = nowDustRes.data.pm25Grade1h;
               const pm10Grade1h = nowDustRes.data.pm10Grade1h;
               setDust(pm10Grade1h || "-"); // 만약 null이면 "-"로 설정
               setSDust(pm25Grade1h || "-");
-              // if (dust >= 3 || sdust >= 3) {
-              //   setRecommend((prevRecommend) =>
-              //     !prevRecommend.includes("마스크")
-              //       ? [...prevRecommend, "마스크"]
-              //       : prevRecommend
-              //   );
-              // }
+
               console.log(dust);
-              // if (outingTimes.outing1Time && outingTimes.outing2Time) {
-              //   const outingStartTime = parseInt(
-              //     formatTimeToFixedHours(outingTimes.outing1Time)
-              //   );
-              //   const outingEndTime = parseInt(
-              //     formatTimeToFixedHours(outingTimes.outing2Time)
-              //   );
 
               const todayPTY = todayWeatherRes.data.filter(
                 (item) => item.category === "PTY"

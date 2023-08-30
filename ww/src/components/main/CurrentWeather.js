@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import moment from "moment-timezone";
 import Address from "./Address";
 
-const CurrentWeather = ({ responseW, latitude, longitude, nowHours }) => {
+const CurrentWeather = ({ responseW, latitude, longitude }) => {
+  moment.tz.setDefault("Asia/Seoul");
+  console.log(moment().hour());
+  const nowHours = moment().hour();
   // pm25Grade1h 및 pm10Grade1h 값을 변환하여 등급으로 표시하는 함수
   const nowWeatherRes = responseW.nowWeatherRes;
   const todayWeatherRes = responseW.todayWeatherRes;

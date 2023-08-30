@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import moment from "moment-timezone";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const TimeWeather = ({ responseW, nowHours }) => {
+const TimeWeather = ({ responseW }) => {
+  moment.tz.setDefault("Asia/Seoul");
+  console.log(moment().hour());
+  const nowHours = moment().hour();
   const [weatherData, setWeatherData] = useState([]);
   const [weatherData2, setWeatherData2] = useState([]);
 
