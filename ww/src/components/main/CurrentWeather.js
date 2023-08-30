@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Address from "./Address";
 
-const CurrentWeather = ({ responseW, latitude, longitude }) => {
+const CurrentWeather = ({ responseW, latitude, longitude, nowHours }) => {
   // pm25Grade1h 및 pm10Grade1h 값을 변환하여 등급으로 표시하는 함수
   const nowWeatherRes = responseW.nowWeatherRes;
   const todayWeatherRes = responseW.todayWeatherRes;
@@ -20,8 +20,8 @@ const CurrentWeather = ({ responseW, latitude, longitude }) => {
   const [yTemperature, setYTemperature] = useState(""); //
   const [message, setMessage] = useState("");
 
-  const now = new Date();
-  const nowHours = now.getHours();
+  // const now = new Date();
+  // const nowHours = now.getHours();
 
   const getGrade = (value) => {
     switch (value) {

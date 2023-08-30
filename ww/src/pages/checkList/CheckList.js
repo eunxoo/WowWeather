@@ -4,9 +4,9 @@ import { GoChecklist } from "react-icons/go";
 import { VscAdd } from "react-icons/vsc";
 import { MdDelete } from "react-icons/md";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
-
+import moment from "moment-timezone";
 import axios from "axios";
-import CheckBox from "../../components/checklist/CheckBox";
+
 import { fireStoreJob } from "../../fbase";
 import {
   collection,
@@ -20,11 +20,12 @@ import {
   where,
 } from "firebase/firestore";
 
-const CheckList = ({ userObj }) => {
+const CheckList = ({ userObj, nowHours }) => {
+  moment.tz.setDefault("Asia/Seoul");
   const url =
     "https://port-0-wow-node-express-54ouz2lllulbggn.sel3.cloudtype.app";
-  const currentDateTime = new Date();
-  const hours = currentDateTime.getHours();
+  // const currentDateTime = new Date();
+  const hours = nowHours;
   const [rain, setRain] = useState("");
   const [dust, setDust] = useState("");
   const [sdust, setSDust] = useState("");
@@ -32,7 +33,7 @@ const CheckList = ({ userObj }) => {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [recommend, setRecommend] = useState([]);
-
+  console.log(nowHours);
   const [responseW, setResponseW] = useState({
     nowPTY: [],
     todayPTY: [],
@@ -46,23 +47,13 @@ const CheckList = ({ userObj }) => {
   });
 
   const getDate = () => {
-    let today = new Date(new Date());
-    let yyyy = today.getFullYear().toString();
-    let mm = today.getMonth() + 1;
-    mm = mm < 10 ? "0" + mm.toString() : mm.toString();
-    let dd = today.getDate();
-    dd = dd < 10 ? "0" + dd.toString() : dd.toString();
-    return yyyy + mm + dd;
+    const today = moment();
+    return today.format("YYYYMMDD");
   };
 
   const getTomorrowDate = () => {
-    let tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
-    let yyyy = tomorrow.getFullYear().toString();
-    let mm = tomorrow.getMonth() + 1;
-    mm = mm < 10 ? "0" + mm.toString() : mm.toString();
-    let dd = tomorrow.getDate();
-    dd = dd < 10 ? "0" + dd.toString() : dd.toString();
-    return yyyy + mm + dd;
+    const tomorrow = moment().add(1, "days");
+    return tomorrow.format("YYYYMMDD");
   };
 
   const formatTimeToFixedHours = (time) => {
@@ -229,10 +220,10 @@ const CheckList = ({ userObj }) => {
               if (nowPTY) {
                 setRain(nowPTY.fcstValue);
               }
-              console.log(todayWeatherRes);
               console.log(tomorrowWeatherRes);
               console.log(nowWeatherRes);
               console.log(nowDustRes);
+              console.log(todayWeatherRes);
 
               const pm25Grade1h = nowDustRes.data.pm25Grade1h;
               const pm10Grade1h = nowDustRes.data.pm10Grade1h;

@@ -4,9 +4,8 @@ import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { firebaseAuth, signOut } from "../../fbase";
 
-const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj }) => {
+const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj, nowHours }) => {
   const location = useLocation();
-  const nowHours = new Date().getHours();
 
   useEffect(() => {
     document.addEventListener("mousedown", handlerOutside);

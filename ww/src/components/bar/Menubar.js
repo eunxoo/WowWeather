@@ -4,9 +4,8 @@ import styled from "styled-components";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Sidebar from "./Sidebar";
 
-const Menubar = ({ userObj }) => {
+const Menubar = ({ userObj, nowHours }) => {
   const [isShow, setIsShow] = useState(false);
-  const nowHours = new Date().getHours();
 
   const controlNavbar = () => {
     if (window.scrollY > 30) {
@@ -52,6 +51,7 @@ const Menubar = ({ userObj }) => {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         userObj={userObj}
+        nowHours={nowHours}
       />
     </Container>
   );

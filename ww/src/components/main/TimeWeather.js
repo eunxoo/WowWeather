@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const TimeWeather = ({ responseW }) => {
+const TimeWeather = ({ responseW, nowHours }) => {
   const [weatherData, setWeatherData] = useState([]);
   const [weatherData2, setWeatherData2] = useState([]);
 
@@ -110,8 +110,8 @@ const TimeWeather = ({ responseW }) => {
   const sortedWeatherData = sortByTime(weatherData);
   const sortedWeatherData2 = sortByTime(weatherData2);
 
-  const now = new Date();
-  const nowHours = now.getHours();
+  // const now = new Date();
+  // const nowHours = now.getHours();
 
   useEffect(() => {
     const processedWeatherData = {};
@@ -128,8 +128,6 @@ const TimeWeather = ({ responseW }) => {
       const fcstDate = item.fcstDate;
 
       const forecastHour = parseInt(fcstTime.substr(0, 2), 10);
-      console.log(forecastHour);
-      console.log(forecastHour);
       if (forecastHour >= nowHours && forecastHour <= nowHours + 4) {
         if (!processedWeatherData[fcstTime]) {
           processedWeatherData[fcstTime] = {
@@ -174,6 +172,8 @@ const TimeWeather = ({ responseW }) => {
       }
     });
     console.log(processedWeatherData[1800]);
+    console.log(responseW.nowWeatherRes);
+    console.log(responseW.todayWeatherRes);
     responseW.tomorrowWeatherRes.forEach((item) => {
       const fcstTime = item.fcstTime;
       const category = item.category;

@@ -6,7 +6,7 @@ import TimeWeather from "../../components/main/TimeWeather";
 import CurrentWeather from "../../components/main//CurrentWeather";
 import Style from "../myStyle/Style";
 
-const Weather = () => {
+const Weather = ({ nowHours }) => {
   const url =
     "https://port-0-wow-node-express-54ouz2lllulbggn.sel3.cloudtype.app";
 
@@ -19,8 +19,8 @@ const Weather = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
 
-  const currentDateTime = new Date();
-  const hours = currentDateTime.getHours();
+  // const currentDateTime = new Date();
+  // const hours = currentDateTime.getHours();
 
   const [rain, setRain] = useState("");
 
@@ -91,22 +91,23 @@ const Weather = () => {
           });
       });
     }
-  }, [rain, hours]);
+  }, [rain, nowHours]);
 
   return (
     <Container>
       {isLoading ? (
         <LogoImg src={"/images/logo/wowlogoreverse.gif"} />
       ) : (
-        <WrapWeather rain={rain} hours={hours}>
+        <WrapWeather rain={rain} nowHours={nowHours}>
           <CurrentWeather
             responseW={responseW}
             latitude={latitude}
             longitude={longitude}
+            nowHours={nowHours}
           />
 
-          <TimeWeather responseW={responseW} />
-          <Style />
+          <TimeWeather responseW={responseW} nowHours={nowHours} />
+          <Style nowHours={nowHours} />
         </WrapWeather>
       )}
     </Container>
@@ -123,13 +124,16 @@ const Container = styled.div`
 `;
 
 const WrapWeather = styled.div`
-  background: ${({ rain, hours }) => {
-    console.log(`rain: ${rain} hours: ${hours}`);
-    if (rain == 0 && hours >= 4 && hours <= 19) {
+  background: ${({ rain, nowHours }) => {
+    console.log(`rain: ${rain} hours: ${nowHours}`);
+    if (rain == 0 && nowHours >= 4 && nowHours <= 19) {
       return "linear-gradient(white 3.5%, #b4dfff)";
-    } else if (rain !== 0 && hours >= 4 && hours <= 19) {
+    } else if (rain !== 0 && nowHours >= 4 && nowHours <= 19) {
       return "linear-gradient(white 3.5%, #C6C6C6)";
-    } else if ((hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)) {
+    } else if (
+      (nowHours >= 20 && nowHours <= 23) ||
+      (nowHours >= 0 && nowHours <= 4)
+    ) {
       return "linear-gradient(black 3.5%, #0B0085)";
     }
   }};
