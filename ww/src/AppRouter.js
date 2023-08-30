@@ -21,8 +21,6 @@ const AppRouter = ({ refreshUser, isLoggedIn, userObj }) => {
               path="/checklist"
               element={<CheckList userObj={userObj} />}
             />
-
-            <Route path="/mystyle" element={<Style />} />
           </Route>
         </>
       ) : (

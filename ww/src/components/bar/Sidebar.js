@@ -66,12 +66,6 @@ const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj, hours }) => {
               체크리스트
             </Link>
           </Menu>
-          <Menu $isActive={location.pathname === "/mystyle"} hours={hours}>
-            <MdNavigateNext className="in" />
-            <Link className="link" to="/mystyle" onClick={toggleSide}>
-              나의 스타일
-            </Link>
-          </Menu>
         </ul>
         <SignOut onClick={logout}>로그아웃</SignOut>
       </Container>
