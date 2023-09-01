@@ -9,13 +9,13 @@ const Menubar = ({ userObj }) => {
   moment.tz.setDefault("Asia/Seoul");
   console.log(moment().hour());
   const nowHours = moment().hour();
-  const [isShow, setIsShow] = useState(false);
+  const [isShow, setIsShow] = useState(true);
 
   const controlNavbar = () => {
-    if (window.scrollY > 30) {
-      setIsShow(true);
-    } else {
+    if (window.scrollY > 10) {
       setIsShow(false);
+    } else {
+      setIsShow(true);
     }
   };
 
@@ -33,21 +33,18 @@ const Menubar = ({ userObj }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleSide = () => {
     setIsOpen(true);
-    setIsShow(true);
+    setIsShow(false);
     showModal();
   };
   return (
     <Container hours={nowHours}>
       <MenuDiv onClick={toggleSide}></MenuDiv>
-      <Wrap hours={nowHours}>
+      <Wrap hours={nowHours} className={`nav ${!isShow && "navNone"}`}>
         <GiHamburgerMenu
-          className={`hamburger ${isShow && "hamburgerNone"}`}
+          className={`hamburger ${!isShow && "hamburgerNone"}`}
           role="button"
         />
-        <Navbar
-          hours={nowHours}
-          className={`nav ${isShow && "navNone"}`}
-        ></Navbar>
+        <Navbar hours={nowHours}></Navbar>
       </Wrap>
       <Outlet />
       <Sidebar
@@ -120,7 +117,7 @@ const Navbar = styled.div`
       : "white";
   }};
   /* opacity: 0.5; */
-  height: 5vh;
+  height: 6vh;
   width: 100%;
   position: fixed;
   top: 0;
