@@ -10,6 +10,7 @@ const CurrentWeather = ({ responseW, latitude, longitude }) => {
   // pm25Grade1h 및 pm10Grade1h 값을 변환하여 등급으로 표시하는 함수
   const nowWeatherRes = responseW.nowWeatherRes;
   const todayWeatherRes = responseW.todayWeatherRes;
+  const tfweatherRes = responseW.tfweatherRes;
   const nowDustRes = responseW.nowDustRes;
   const yesWeatherRes = responseW.yesWeatherRes;
   console.log("lat" + latitude + "lon" + longitude);
@@ -112,8 +113,9 @@ const CurrentWeather = ({ responseW, latitude, longitude }) => {
     }
 
     // ... (오늘의 최저 및 최고 기온 데이터 처리)
-    const tmnItem = todayWeatherRes.find((item) => item.category === "TMN");
-    const tmxItem = todayWeatherRes.find((item) => item.category === "TMX");
+    const tmnItem = tfweatherRes.find((item) => item.category === "TMN");
+    const tmxItem = tfweatherRes.find((item) => item.category === "TMX");
+    console.log(tfweatherRes);
     if (tmnItem) {
       const tmnValue = parseFloat(tmnItem.fcstValue);
       setMin(

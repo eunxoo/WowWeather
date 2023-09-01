@@ -10,7 +10,7 @@ const Address = ({ latitude, longitude, hours }) => {
     if (latitude && longitude) {
       console.log("Latitude:", latitude);
       console.log("Longitude:", longitude);
-      const apiUrl = `https://port-0-wow-node-express-54ouz2lllulbggn.sel3.cloudtype.app/convert?latitude=${latitude}&longitude=${longitude}`;
+      const apiUrl = `/api/convert?latitude=${latitude}&longitude=${longitude}`;
 
       axios
         .get(apiUrl)

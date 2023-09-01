@@ -10,12 +10,12 @@ const Weather = () => {
   moment.tz.setDefault("Asia/Seoul");
   console.log(moment().hour());
   const nowHours = moment().hour();
-  const url =
-    "https://port-0-wow-node-express-54ouz2lllulbggn.sel3.cloudtype.app";
+  const url = "/api";
 
   const [responseW, setResponseW] = useState({
     nowWeatherRes: [],
     todayWeatherRes: [],
+    tfweatherRes: [],
     tomorrowWeatherRes: [],
     nowDustRes: [],
     yesWeatherRes: [],
@@ -61,6 +61,7 @@ const Weather = () => {
             "SKY",
             "PTY",
           ]),
+          fetchData("/tfweather", lat, lon, ["TMN", "TMX", "TMP"]),
           fetchData("/tomorrowweather", lat, lon, ["TMP", "SKY", "PTY"]),
           fetchData("/nowdust", lat, lon),
           fetchData("/yesweather", lat, lon, ["T1H"]),
@@ -69,6 +70,7 @@ const Weather = () => {
             ([
               nowWeatherRes,
               todayWeatherRes,
+              tfweatherRes,
               tomorrowWeatherRes,
               nowDustRes,
               yesWeatherRes,
@@ -76,6 +78,7 @@ const Weather = () => {
               setResponseW({
                 nowWeatherRes: nowWeatherRes.data,
                 todayWeatherRes: todayWeatherRes.data,
+                tfweatherRes: tfweatherRes.data,
                 tomorrowWeatherRes: tomorrowWeatherRes.data,
                 nowDustRes: nowDustRes.data,
                 yesWeatherRes: yesWeatherRes.data,
@@ -97,7 +100,7 @@ const Weather = () => {
   }, [rain, nowHours]);
 
   return (
-    <Container>
+    <Container rain={rain} hours={nowHours} isloading={isLoading.toString()}>
       {isLoading ? (
         <LogoImg src={"/images/logo/wowlogoreverse.gif"} />
       ) : (
@@ -109,7 +112,7 @@ const Weather = () => {
           />
 
           <TimeWeather responseW={responseW} />
-          <Style />
+          <Style responseW={responseW} />
         </WrapWeather>
       )}
     </Container>
@@ -119,16 +122,10 @@ const Weather = () => {
 export default Weather;
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  padding-top: 6vh;
-`;
-
-const WrapWeather = styled.div`
-  background: ${({ rain, hours }) => {
-    console.log(`rain: ${rain} hours: ${hours}`);
-    if (rain == 0 && hours >= 4 && hours <= 19) {
+  background: ${({ rain, hours, isloading }) => {
+    if (isloading === "true") {
+      return "white"; // isLoading이 true일 때 배경을 흰색으로 설정
+    } else if (rain === 0 && hours >= 4 && hours <= 19) {
       return "linear-gradient(white 3.5%, #b4dfff)";
     } else if (rain !== 0 && hours >= 4 && hours <= 19) {
       return "linear-gradient(white 3.5%, #C6C6C6)";
@@ -136,7 +133,26 @@ const WrapWeather = styled.div`
       return "linear-gradient(black 3.5%, #0B0085)";
     }
   }};
+  display: flex;
+  flex-direction: column;
   height: 100vh;
+  padding-top: 6vh;
+  overflow: scroll;
+`;
+
+const WrapWeather = styled.div`
+  /* background: ${({ rain, hours }) => {
+    console.log(`rain: ${rain} hours: ${hours}`);
+    if (rain === 0 && hours >= 4 && hours <= 19) {
+      return "linear-gradient(white 3.5%, #b4dfff)";
+    } else if (rain !== 0 && hours >= 4 && hours <= 19) {
+      return "linear-gradient(white 3.5%, #C6C6C6)";
+    } else if ((hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)) {
+      return "linear-gradient(black 3.5%, #0B0085)";
+    }
+  }}; */
+  height: 100%;
+  overflow: scroll;
 `;
 
 const LogoImg = styled.img`
