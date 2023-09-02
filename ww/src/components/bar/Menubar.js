@@ -12,7 +12,7 @@ const Menubar = ({ userObj }) => {
   const [isShow, setIsShow] = useState(true);
 
   const controlNavbar = () => {
-    if (window.scrollY > 10) {
+    if (window.scrollY > 0) {
       setIsShow(false);
     } else {
       setIsShow(true);
@@ -21,8 +21,12 @@ const Menubar = ({ userObj }) => {
 
   useEffect(() => {
     window.addEventListener("scroll", controlNavbar);
+    window.addEventListener("wheel", controlNavbar);
+    window.addEventListener("touchmove", controlNavbar);
     return () => {
       window.removeEventListener("scroll", controlNavbar);
+      window.removeEventListener("wheel", controlNavbar);
+      window.removeEventListener("touchmove", controlNavbar);
     };
   }, []);
 
@@ -33,9 +37,9 @@ const Menubar = ({ userObj }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleSide = () => {
     setIsOpen(true);
-    setIsShow(false);
     showModal();
   };
+
   return (
     <Container hours={nowHours}>
       <MenuDiv onClick={toggleSide}></MenuDiv>

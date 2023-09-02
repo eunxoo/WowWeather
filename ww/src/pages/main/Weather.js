@@ -112,7 +112,7 @@ const Weather = () => {
           />
 
           <TimeWeather responseW={responseW} />
-          <Style responseW={responseW} />
+          <Style rain={rain} responseW={responseW} />
         </WrapWeather>
       )}
     </Container>
@@ -123,11 +123,13 @@ export default Weather;
 
 const Container = styled.div`
   background: ${({ rain, hours, isloading }) => {
+    console.log("rain:" + rain);
+    console.log("hours:" + hours);
     if (isloading === "true") {
       return "white"; // isLoading이 true일 때 배경을 흰색으로 설정
-    } else if (rain === 0 && hours >= 4 && hours <= 19) {
+    } else if (rain == 0 && hours >= 4 && hours <= 19) {
       return "linear-gradient(white 3.5%, #b4dfff)";
-    } else if (rain !== 0 && hours >= 4 && hours <= 19) {
+    } else if (rain != 0 && hours >= 4 && hours <= 19) {
       return "linear-gradient(white 3.5%, #C6C6C6)";
     } else if ((hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)) {
       return "linear-gradient(black 3.5%, #0B0085)";
@@ -137,22 +139,11 @@ const Container = styled.div`
   flex-direction: column;
   height: 100vh;
   padding-top: 6vh;
-  overflow: scroll;
 `;
 
 const WrapWeather = styled.div`
-  /* background: ${({ rain, hours }) => {
-    console.log(`rain: ${rain} hours: ${hours}`);
-    if (rain === 0 && hours >= 4 && hours <= 19) {
-      return "linear-gradient(white 3.5%, #b4dfff)";
-    } else if (rain !== 0 && hours >= 4 && hours <= 19) {
-      return "linear-gradient(white 3.5%, #C6C6C6)";
-    } else if ((hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)) {
-      return "linear-gradient(black 3.5%, #0B0085)";
-    }
-  }}; */
   height: 100%;
-  overflow: scroll;
+  /* overflow: auto; */
 `;
 
 const LogoImg = styled.img`
@@ -175,7 +166,3 @@ const LogoImg = styled.img`
   -moz-user-drag: none;
   -o-user-drag: none;
 `;
-
-const TodayWrap = styled.div``;
-
-const Todays = styled.div``;

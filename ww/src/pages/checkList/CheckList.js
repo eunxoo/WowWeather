@@ -10,8 +10,7 @@ const CheckList = ({ userObj }) => {
   moment.tz.setDefault("Asia/Seoul");
   console.log(moment().hour());
   const nowHours = moment().hour();
-  const url =
-    "https://port-0-wow-node-express-54ouz2lllulbggn.sel3.cloudtype.app";
+  const url = "/api";
 
   const hours = nowHours;
   const [rain, setRain] = useState("");

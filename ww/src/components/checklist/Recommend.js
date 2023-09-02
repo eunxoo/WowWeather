@@ -171,7 +171,6 @@ const Recommend = ({ responseW, dust, sdust }) => {
         </TimeWrap>
         <SubButton
           onClick={showResult}
-          hours={hours}
           disabled={
             responseW.nowPTY.length === 0 &&
             responseW.todayPTY.length === 0 &&
@@ -252,18 +251,17 @@ const InputOuting2 = styled.input`
 
 const SubButton = styled.button`
   height: 3vh;
-  color: ${({ hours }) => {
-    return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
-      ? "black"
-      : "white";
-  }};
-  background-color: ${({ hours }) => {
-    return (hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)
-      ? "white"
-      : "black";
-  }};
-  border: none;
+  color: black;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
   align-self: center;
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    --button-bg: #ccc;
+  }
 `;
 
 const ContentWrap = styled.div`

@@ -6,6 +6,7 @@ import {
   signOut,
   updateProfile,
   sendEmailVerification,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
@@ -33,4 +34,5 @@ export {
   signOut,
   updateProfile,
   sendEmailVerification,
+  sendPasswordResetEmail,
 };

@@ -5,7 +5,7 @@ import moment from "moment-timezone";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
-const Style = ({ responseW }) => {
+const Style = ({ rain, responseW }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isPLoading, setIsPLoading] = useState(true);
   const [style, setStyle] = useState();
@@ -229,18 +229,52 @@ const Style = ({ responseW }) => {
                 />
               ))}
             </ImgDiv>
-            {/* <img
-          src="https://image.msscdn.net/mfile_s01/_street_images/67602/280.street_img_view15ff68f6c238d1.jpg?20210107093155"
-          alt="이미지"
-        /> */}
           </BottomDiv>
         </>
       )}
+      <Back
+        rain={rain}
+        hours={nowHours}
+        isloading={isLoading.toString()}
+      ></Back>
     </Container>
   );
 };
 
 export default Style;
+
+const Back = styled.div`
+  position: absolute; /* 절대 위치 지정 */
+  top: 90%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 35vh;
+  background: ${({ rain, hours }) => {
+    console.log("rain:" + rain);
+    console.log("hours:" + hours);
+    if (rain == 0 && hours >= 4 && hours <= 19) {
+      return "#b4dfff";
+    } else if (rain != 0 && hours >= 4 && hours <= 19) {
+      return "#C6C6C6";
+    } else if ((hours >= 20 && hours <= 23) || (hours >= 0 && hours <= 4)) {
+      return "#0B0085";
+    }
+  }};
+
+  z-index: -99999999;
+
+  ${({ isloading }) =>
+    isloading === "true" &&
+    `
+    position: absolute; 
+    top: 0%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -99999999;
+  `}
+`;
 
 const Container = styled.div`
   background-color: ${({ hours }) => {
@@ -316,7 +350,7 @@ const ImgDiv = styled.div`
   border-radius: 10px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   height: 20vh;
 `;
 

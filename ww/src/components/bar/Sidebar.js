@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { firebaseAuth, signOut } from "../../fbase";
 
-const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj, hours }) => {
+const Sidebar = ({ isOpen, setIsOpen, userObj, hours }) => {
   const location = useLocation();
 
   useEffect(() => {
@@ -15,7 +15,6 @@ const Sidebar = ({ setIsShow, isOpen, setIsOpen, userObj, hours }) => {
   }, []);
   const toggleSide = () => {
     setIsOpen(false);
-    setIsShow(false);
     hideModal();
   };
 
