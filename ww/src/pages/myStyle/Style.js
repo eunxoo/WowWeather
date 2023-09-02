@@ -7,6 +7,7 @@ axios.defaults.withCredentials = true;
 
 const Style = ({ responseW }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isPLoading, setIsPLoading] = useState(true);
   const [style, setStyle] = useState();
   const [responseS, setResponseS] = useState({
     ctopRes: [],
@@ -62,6 +63,7 @@ const Style = ({ responseW }) => {
 
   const onClickStyle = () => {
     setIsLoading(true);
+    setIsPLoading(false);
     const apiUrls = [
       "/ctop",
       "/cbottom",
@@ -83,6 +85,7 @@ const Style = ({ responseW }) => {
             fbottomRes: fbottomRes.data.cluster_images,
           });
           setIsLoading(false);
+          setIsPLoading(true);
         }
       )
       .catch((error) => {
@@ -168,7 +171,13 @@ const Style = ({ responseW }) => {
   return (
     <Container hours={nowHours}>
       {isLoading ? (
-        <TodayStyle onClick={onClickStyle}>오늘의 스타일 보기</TodayStyle>
+        isPLoading ? (
+          <TodayStyle onClick={onClickStyle}>오늘의 스타일 보기</TodayStyle>
+        ) : (
+          <TodayStyle>
+            <LoaderImg src={`/images/icon/preloader.gif`} alt="로딩 중" />
+          </TodayStyle>
+        )
       ) : (
         <>
           <ButtonDiv>
@@ -251,6 +260,8 @@ const Container = styled.div`
 const TodayStyle = styled.div`
   text-align: center;
 `;
+
+const LoaderImg = styled.img``;
 
 const ButtonDiv = styled.div`
   display: flex;

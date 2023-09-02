@@ -2,11 +2,17 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { PiDotsThreeVertical } from "react-icons/pi";
+import { MdClose } from "react-icons/md";
 import GoogleLogin from "../../components/login/GoogleLogin";
-import { firebaseAuth, signInWithEmailAndPassword } from "../../fbase";
+import {
+  firebaseAuth,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "../../fbase";
 
 const Login = () => {
   const [loginEmail, setLoginEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   // onAuthStateChanged(firebaseAuth, (currentUser) => {
   //   setUser(currentUser);
@@ -27,6 +33,28 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error.message);
+      alert("이메일 또는 비밀번호가 일치하지 않습니다.");
+    }
+  };
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const showModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const findPassword = async () => {
+    try {
+      console.log(email);
+      await sendPasswordResetEmail(firebaseAuth, email);
+      alert("비밀번호 재설정 이메일이 전송되었습니다. 이메일을 확인하세요.");
+      window.location.replace("/");
+    } catch (error) {
+      console.error(error.message);
+      alert("비밀번호 재설정 이메일을 보낼 수 없습니다. 이메일을 확인하세요.");
     }
   };
 
@@ -61,7 +89,25 @@ const Login = () => {
           <LoginBtn onClick={signIn}>로그인</LoginBtn>
         </Box>
         <Boxx>
-          <SearchPassWord>비밀번호 찾기</SearchPassWord>
+          <SearchPassWord onClick={showModal}>비밀번호 찾기</SearchPassWord>
+          {modalOpen && (
+            <>
+              <Modal>
+                <MdCloseB onClick={closeModal} />
+                <Content>
+                  <EmailInput
+                    type="email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
+                    placeholder="이메일을 입력하세요."
+                  />
+                  <SubButton onClick={findPassword}>찾기</SubButton>
+                </Content>
+              </Modal>
+            </>
+          )}
           <BarContainer>
             <PiDotsThreeVertical className="bar" />
           </BarContainer>
@@ -209,6 +255,73 @@ const SearchPassWord = styled.div`
   right: 300%;
   width: max-content;
   font-size: 0.8rem;
+`;
+
+const Modal = styled.div`
+  width: 90vw;
+  height: 30vh;
+
+  /* 최상단 위치 */
+  z-index: 999;
+
+  /* 중앙 배치 */
+  /* top, bottom, left, right 는 브라우저 기준으로 작동한다. */
+  /* translate는 본인의 크기 기준으로 작동한다. */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -90%);
+
+  /* 모달창 디자인 */
+  background-color: white;
+  border: 3px solid black;
+  border-radius: 30px;
+`;
+
+const MdCloseB = styled(MdClose)`
+  position: absolute;
+  font-size: 4vh;
+  top: 2vh;
+  right: 3vw;
+`;
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const EmailInput = styled.input`
+  border: 1px solid black;
+  border-radius: 10px;
+  outline: none;
+  height: 5vh;
+  width: 230px;
+  margin: 7vh auto;
+  font-size: 15px;
+  &::placeholder {
+    padding-left: 10px;
+  }
+
+  &:focus {
+    /* color: #363636; */
+    border: 2px solid black;
+  }
+`;
+
+const SubButton = styled.button`
+  width: 16vw;
+  border: 2px solid black;
+  position: absolute;
+  bottom: 3vh;
+  right: 3vw;
+  height: 3vh;
+  font-size: 1.5vh;
+  border-radius: 10px;
+
+  &:focus {
+    background-color: black;
+    color: white;
+  }
 `;
 
 const RegisterDiv = styled.div`

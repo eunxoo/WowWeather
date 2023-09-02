@@ -47,7 +47,7 @@ const Register = () => {
         registerPassword
       );
       await sendEmailVerification(firebaseAuth.currentUser);
-      alert("auth/post-email-verification-mail");
+      alert("회원가입이 완료되었습니다! 이메일을 확인해주세요.");
       console.log(createdUser);
       setRegisterEmail("");
       setRegisterPassword("");
