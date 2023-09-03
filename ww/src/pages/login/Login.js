@@ -295,9 +295,9 @@ const EmailInput = styled.input`
   border-radius: 10px;
   outline: none;
   height: 5vh;
-  width: 230px;
+  width: 65vw;
   margin: 7vh auto;
-  font-size: 15px;
+  font-size: 2vh;
   &::placeholder {
     padding-left: 10px;
   }
